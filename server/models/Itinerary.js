@@ -62,6 +62,5 @@ const itinerarySchema = new mongoose.Schema(
 
 // index for faster queries
 itinerarySchema.index({ userId: 1, createdAt: -1 })
-itinerarySchema.index({ shareToken: 1 })
 
 module.exports = mongoose.model("Itinerary", itinerarySchema)
