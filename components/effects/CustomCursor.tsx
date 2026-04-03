@@ -1,91 +1,145 @@
 "use client"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useTheme } from "@/context/ThemeContext"
 
 export default function CustomCursor() {
-  const outerRef = useRef<HTMLDivElement>(null)
-  const innerRef = useRef<HTMLDivElement>(null)
-  
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [isDesktop, setIsDesktop] = useState(false)
+
   let flavor = "default"
+  let mode = "light"
   try {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const theme = useTheme()
     flavor = theme.flavor
+    mode = theme.mode
   } catch {}
 
   useEffect(() => {
-    const outer = outerRef.current
-    const inner = innerRef.current
-    if (!outer || !inner) return
-
-    // Only on desktop
     if (window.matchMedia("(pointer: coarse)").matches) return
+    setIsDesktop(true)
 
-    let mouseX = 0, mouseY = 0
-    let outerX = 0, outerY = 0
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext("2d")
+    if (!ctx) return
+
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+
+    let mouseX = -100, mouseY = -100
+    let isHovering = false
+
+    // Trail particles
+    const trail: { x: number; y: number; alpha: number; size: number }[] = []
+
+    const resize = () => {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    }
 
     const moveMouse = (e: MouseEvent) => {
       mouseX = e.clientX
       mouseY = e.clientY
-      inner.style.left = mouseX + "px"
-      inner.style.top = mouseY + "px"
+
+      // Push trail particle
+      trail.push({
+        x: mouseX,
+        y: mouseY,
+        alpha: 0.6,
+        size: isHovering ? 4 : 2.5,
+      })
+      if (trail.length > 20) trail.shift()
     }
 
-    const animate = () => {
-      outerX += (mouseX - outerX) * 0.15
-      outerY += (mouseY - outerY) * 0.15
-      outer.style.left = outerX + "px"
-      outer.style.top = outerY + "px"
-      requestAnimationFrame(animate)
-    }
+    const handleEnter = () => { isHovering = true }
+    const handleLeave = () => { isHovering = false }
 
-    const grow = () => {
-      outer.style.width = "50px"
-      outer.style.height = "50px"
-      inner.style.transform = "translate(-50%,-50%) scale(0.5)"
-    }
-    const shrink = () => {
-      outer.style.width = "32px"
-      outer.style.height = "32px"
-      inner.style.transform = "translate(-50%,-50%) scale(1)"
+    // Colors
+    const primaryColor = flavor === "stranger" ? [255, 50, 50] : mode === "dark" ? [89, 176, 255] : [79, 70, 229]
+    const dotColor = flavor === "stranger" ? "#ff3333" : mode === "dark" ? "#59b0ff" : "#4F46E5"
+
+    let cursorX = -100, cursorY = -100
+
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+      // Smooth cursor follow
+      cursorX += (mouseX - cursorX) * 0.18
+      cursorY += (mouseY - cursorY) * 0.18
+
+      // Draw trail
+      for (let i = 0; i < trail.length; i++) {
+        const p = trail[i]
+        p.alpha -= 0.03
+        if (p.alpha <= 0) { trail.splice(i, 1); i--; continue }
+
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.size * p.alpha, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(${primaryColor[0]},${primaryColor[1]},${primaryColor[2]},${p.alpha * 0.5})`
+        ctx.fill()
+      }
+
+      // Outer ring (follows with lag)
+      const ringSize = isHovering ? 28 : 18
+      ctx.beginPath()
+      ctx.arc(cursorX, cursorY, ringSize, 0, Math.PI * 2)
+      ctx.strokeStyle = `rgba(${primaryColor[0]},${primaryColor[1]},${primaryColor[2]},${isHovering ? 0.6 : 0.35})`
+      ctx.lineWidth = isHovering ? 2.5 : 1.5
+      ctx.stroke()
+
+      // Glow ring in stranger mode
+      if (flavor === "stranger") {
+        ctx.beginPath()
+        ctx.arc(cursorX, cursorY, ringSize + 6, 0, Math.PI * 2)
+        ctx.strokeStyle = `rgba(255,50,50,0.1)`
+        ctx.lineWidth = 8
+        ctx.stroke()
+      }
+
+      // Center dot (snaps instantly)
+      ctx.beginPath()
+      ctx.arc(mouseX, mouseY, isHovering ? 4 : 3, 0, Math.PI * 2)
+      ctx.fillStyle = dotColor
+      ctx.fill()
+
+      requestAnimationFrame(draw)
     }
 
     document.addEventListener("mousemove", moveMouse)
-    document.querySelectorAll("a, button, [role=button], input, select, textarea").forEach(el => {
-      el.addEventListener("mouseenter", grow)
-      el.addEventListener("mouseleave", shrink)
-    })
+    window.addEventListener("resize", resize)
 
-    requestAnimationFrame(animate)
+    // Attach hover listeners
+    const attachHovers = () => {
+      document.querySelectorAll("a, button, [role=button], input, select, textarea, .card").forEach(el => {
+        el.addEventListener("mouseenter", handleEnter)
+        el.addEventListener("mouseleave", handleLeave)
+      })
+    }
+    attachHovers()
+
+    // Re-attach on DOM changes (for dynamically rendered content)
+    const observer = new MutationObserver(attachHovers)
+    observer.observe(document.body, { childList: true, subtree: true })
+
     document.body.style.cursor = "none"
+    requestAnimationFrame(draw)
 
     return () => {
       document.removeEventListener("mousemove", moveMouse)
+      window.removeEventListener("resize", resize)
+      observer.disconnect()
       document.body.style.cursor = ""
     }
-  }, [])
+  }, [flavor, mode])
 
-  const color = flavor === "stranger" ? "rgba(255,50,50,0.6)" : "rgba(79,70,229,0.5)"
-  const dotColor = flavor === "stranger" ? "#ff3333" : "#4F46E5"
+  if (!isDesktop) return null
 
   return (
-    <>
-      <div ref={outerRef}
-        className="hidden md:block fixed top-0 left-0 pointer-events-none z-[9999] mix-blend-difference"
-        style={{
-          width: 32, height: 32, borderRadius: "50%",
-          border: `2px solid ${color}`,
-          transform: "translate(-50%,-50%)",
-          transition: "width 0.3s ease, height 0.3s ease",
-        }} />
-      <div ref={innerRef}
-        className="hidden md:block fixed top-0 left-0 pointer-events-none z-[9999]"
-        style={{
-          width: 6, height: 6, borderRadius: "50%",
-          backgroundColor: dotColor,
-          transform: "translate(-50%,-50%)",
-          transition: "transform 0.2s ease",
-        }} />
-    </>
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 pointer-events-none z-[9999] hidden md:block"
+      style={{ mixBlendMode: "normal" }}
+    />
   )
 }
