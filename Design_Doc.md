@@ -275,4 +275,5 @@ GitHub (main branch)
          └── Auto-deploy on push
          └── Node.js 20 server
          └── Connected to MongoDB Atlas + Redis
+         CD
 ```
