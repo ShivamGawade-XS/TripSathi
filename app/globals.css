@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap");
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: "Inter", system-ui, sans-serif;
+    background-color: #f8fafc;
+    color: #0f172a;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold
+      hover:bg-primary-700 active:bg-primary-800
+      transition-all duration-200 ease-out
+      shadow-lg shadow-primary-600/25 hover:shadow-xl hover:shadow-primary-600/30
+      hover:-translate-y-0.5 active:translate-y-0;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-primary-700 px-6 py-3 rounded-xl font-semibold
+      border-2 border-primary-200 hover:border-primary-400
+      hover:bg-primary-50 transition-all duration-200;
+  }
+
+  .btn-accent {
+    @apply bg-accent-500 text-white px-6 py-3 rounded-xl font-semibold
+      hover:bg-accent-600 active:bg-accent-700
+      transition-all duration-200 ease-out
+      shadow-lg shadow-accent-500/25;
+  }
+
+  .card {
+    @apply bg-white rounded-2xl shadow-md shadow-surface-900/5
+      border border-surface-100 p-6
+      hover:shadow-lg hover:shadow-surface-900/10
+      transition-all duration-300;
+  }
+
+  .glass {
+    @apply bg-white/70 backdrop-blur-xl border border-white/20
+      shadow-lg shadow-surface-900/5;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 rounded-xl border-2 border-surface-200
+      bg-white text-surface-900 placeholder:text-surface-400
+      focus:border-primary-400 focus:ring-4 focus:ring-primary-100
+      outline-none transition-all duration-200;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary-600 to-accent-500
+      bg-clip-text text-transparent;
+  }
+
+  .section-padding {
+    @apply px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24;
+  }
+}
