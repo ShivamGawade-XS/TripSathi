@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter, usePathname } from "next/navigation"
 import LanguageToggle from "@/components/ui/LanguageToggle"
+import Logo from "@/components/ui/Logo"
 import { useLanguage } from "@/context/LanguageContext"
 
 export default function Header() {
@@ -41,8 +42,8 @@ export default function Header() {
                 ←
               </button>
             )}
-            <Link href="/" className="flex items-center gap-2">
-              <img src="/logo.png" alt="TripSathi Logo" className="max-h-10 w-auto object-contain drop-shadow-sm" />
+            <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
+              <Logo className="h-10 sm:h-12 w-auto drop-shadow-sm" />
             </Link>
           </div>
           <nav className="hidden md:flex items-center gap-5">

@@ -1,6 +1,7 @@
 "use client"
 import Link from "next/link"
 import { useLanguage } from "@/context/LanguageContext"
+import Logo from "@/components/ui/Logo"
 
 const destinations = [
   { name: "Delhi", href: "/packages?search=Delhi" },
@@ -29,7 +30,7 @@ export default function EnhancedFooter() {
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
           <div className="col-span-2 md:col-span-1 lg:col-span-2">
             <Link href="/" className="inline-block bg-white/10 hover:bg-white/20 transition-colors p-2 rounded-xl mb-1">
-              <img src="/logo.png" alt="TripSathi Logo" className="max-h-12 w-auto object-contain drop-shadow" />
+              <Logo className="h-12 w-auto brightness-0 invert" />
             </Link>
             <p className="mt-4 text-surface-400 text-sm leading-relaxed">{s.desc}</p>
             <div className="flex gap-3 mt-6">
