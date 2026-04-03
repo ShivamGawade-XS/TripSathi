@@ -7,7 +7,7 @@ interface Alert {
   quota: string; threshold: number; currentPrice: number; status: string; createdAt: string
 }
 
-const API = "http://localhost:5000/api/v1/alerts"
+const API = `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1"}/alerts`
 
 export default function PriceAlertsPage() {
   const [alerts, setAlerts] = useState<Alert[]>([])

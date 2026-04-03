@@ -79,7 +79,7 @@ export default function PackagesPage() {
       const params = new URLSearchParams()
       if (cat !== "all") params.set("category", cat)
       if (sortBy) params.set("sort", sortBy)
-      const res = await fetch(`http://localhost:5000/api/v1/packages?${params}`)
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1"}/packages?${params}`)
       const data = await res.json()
       setPackages(data.packages)
     } catch { setPackages([]) }

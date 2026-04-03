@@ -9,7 +9,7 @@ interface SplitGroup {
   settlements: { from: string; to: string; amount: number }[]
 }
 
-const API = "http://localhost:5000/api/v1/split"
+const API = `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1"}/split`
 
 export default function GroupSplitPage() {
   const [group, setGroup] = useState<SplitGroup | null>(null)

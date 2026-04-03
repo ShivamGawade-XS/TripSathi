@@ -64,7 +64,7 @@ export default function PackageDetailPage() {
   const [travelDate, setTravelDate] = useState("")
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/v1/packages/${params.slug}`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1"}/packages/${params.slug}`)
       .then(r => r.json()).then(d => { setPkg(d); setLoading(false) })
       .catch(() => setLoading(false))
   }, [params.slug])

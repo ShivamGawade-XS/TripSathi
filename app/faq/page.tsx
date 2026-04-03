@@ -29,7 +29,7 @@ export default function FaqPage() {
   };
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/v1/faqs?locale=${locale}`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1"}/faqs?locale=${locale}`)
       .then(r => r.json())
       .then(d => { setFaqs(d.faqs); setCategories(d.categories) })
       .catch(() => {})

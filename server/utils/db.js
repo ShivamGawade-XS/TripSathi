@@ -8,8 +8,8 @@ const connectDB = async () => {
 
     console.log(`MongoDB connected: ${conn.connection.host}`)
   } catch (error) {
-    console.error(`MongoDB connection error: ${error.message}`)
-    process.exit(1)
+    console.warn(`MongoDB setup skipped: Missing URI or connection failed. Running in mock mode.`)
+    // process.exit(1) // Removed so the server can run without DB
   }
 }
 
