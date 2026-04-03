@@ -2,9 +2,11 @@
 import { useState } from "react"
 import Link from "next/link"
 import LanguageToggle from "@/components/ui/LanguageToggle"
+import { useLanguage } from "@/context/LanguageContext"
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const { t } = useLanguage()
   return (
     <header className="sticky top-0 z-50 glass">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -13,14 +15,14 @@ export default function Header() {
             <img src="/logo.png" alt="TripSathi Logo" className="max-h-10 w-auto object-contain drop-shadow-sm" />
           </Link>
           <nav className="hidden md:flex items-center gap-5">
-            <Link href="/" className="text-surface-600 hover:text-primary-600 font-medium transition-colors text-sm">Home</Link>
-            <Link href="/search" className="text-surface-600 hover:text-primary-600 font-medium transition-colors text-sm">Search</Link>
-            <Link href="/packages" className="text-surface-600 hover:text-primary-600 font-medium transition-colors text-sm">Packages</Link>
-            <Link href="/dashboard" className="text-surface-600 hover:text-primary-600 font-medium transition-colors text-sm">My Trips</Link>
-            <Link href="/faq" className="text-surface-600 hover:text-primary-600 font-medium transition-colors text-sm">Help</Link>
+            <Link href="/" className="text-surface-600 hover:text-primary-600 font-medium transition-colors text-sm">{t("nav_home")}</Link>
+            <Link href="/search" className="text-surface-600 hover:text-primary-600 font-medium transition-colors text-sm">{t("nav_search")}</Link>
+            <Link href="/packages" className="text-surface-600 hover:text-primary-600 font-medium transition-colors text-sm">{t("nav_packages") || "Packages"}</Link>
+            <Link href="/dashboard" className="text-surface-600 hover:text-primary-600 font-medium transition-colors text-sm">{t("nav_saved")}</Link>
+            <Link href="/faq" className="text-surface-600 hover:text-primary-600 font-medium transition-colors text-sm">{t("nav_help") || "Help"}</Link>
             <LanguageToggle />
-            <Link href="/login" className="btn-secondary text-sm py-2 px-4">Login</Link>
-            <Link href="/register" className="btn-primary text-sm py-2 px-4">Sign Up</Link>
+            <Link href="/login" className="btn-secondary text-sm py-2 px-4">{t("nav_login")}</Link>
+            <Link href="/register" className="btn-primary text-sm py-2 px-4">{t("nav_register")}</Link>
           </nav>
           <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden p-2 rounded-lg hover:bg-surface-100 transition-colors" aria-label="Toggle menu">
             <svg className="w-6 h-6 text-surface-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -35,14 +37,15 @@ export default function Header() {
         {menuOpen && (
           <div className="md:hidden pb-4 animate-slide-down">
             <nav className="flex flex-col gap-2">
-              <Link href="/" className="px-4 py-2 rounded-lg text-surface-600 hover:bg-surface-100" onClick={() => setMenuOpen(false)}>Home</Link>
-              <Link href="/search" className="px-4 py-2 rounded-lg text-surface-600 hover:bg-surface-100" onClick={() => setMenuOpen(false)}>Search</Link>
-              <Link href="/packages" className="px-4 py-2 rounded-lg text-surface-600 hover:bg-surface-100" onClick={() => setMenuOpen(false)}>Packages</Link>
-              <Link href="/dashboard" className="px-4 py-2 rounded-lg text-surface-600 hover:bg-surface-100" onClick={() => setMenuOpen(false)}>My Trips</Link>
-              <Link href="/faq" className="px-4 py-2 rounded-lg text-surface-600 hover:bg-surface-100" onClick={() => setMenuOpen(false)}>Help & FAQs</Link>
+              <Link href="/" className="px-4 py-2 rounded-lg text-surface-600 hover:bg-surface-100" onClick={() => setMenuOpen(false)}>{t("nav_home")}</Link>
+              <Link href="/search" className="px-4 py-2 rounded-lg text-surface-600 hover:bg-surface-100" onClick={() => setMenuOpen(false)}>{t("nav_search")}</Link>
+              <Link href="/packages" className="px-4 py-2 rounded-lg text-surface-600 hover:bg-surface-100" onClick={() => setMenuOpen(false)}>{t("nav_packages") || "Packages"}</Link>
+              <Link href="/dashboard" className="px-4 py-2 rounded-lg text-surface-600 hover:bg-surface-100" onClick={() => setMenuOpen(false)}>{t("nav_saved")}</Link>
+              <Link href="/faq" className="px-4 py-2 rounded-lg text-surface-600 hover:bg-surface-100" onClick={() => setMenuOpen(false)}>{t("nav_help") || "Help"}</Link>
+              <div className="px-4 py-2"><LanguageToggle /></div>
               <div className="flex gap-2 mt-2">
-                <Link href="/login" className="btn-secondary text-sm py-2 px-4 flex-1 text-center">Login</Link>
-                <Link href="/register" className="btn-primary text-sm py-2 px-4 flex-1 text-center">Sign Up</Link>
+                <Link href="/login" className="btn-secondary text-sm py-2 px-4 flex-1 text-center">{t("nav_login")}</Link>
+                <Link href="/register" className="btn-primary text-sm py-2 px-4 flex-1 text-center">{t("nav_register")}</Link>
               </div>
             </nav>
           </div>

@@ -1,16 +1,12 @@
 "use client"
-import { useState, useRef, useEffect } from "react"
-import { Locale, locales, localeNames, localeFlags } from "@/lib/i18n"
+import { useRef, useState, useEffect } from "react"
+import { locales, localeNames, localeFlags } from "@/lib/i18n"
+import { useLanguage } from "@/context/LanguageContext"
 
 export default function LanguageToggle() {
-  const [locale, setLocale] = useState<Locale>("en")
+  const { locale, setLocale } = useLanguage()
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const saved = localStorage.getItem("tripsathi-locale") as Locale | null
-    if (saved && locales.includes(saved)) setLocale(saved)
-  }, [])
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -19,14 +15,6 @@ export default function LanguageToggle() {
     document.addEventListener("mousedown", handleClick)
     return () => document.removeEventListener("mousedown", handleClick)
   }, [])
-
-  const selectLocale = (l: Locale) => {
-    setLocale(l)
-    localStorage.setItem("tripsathi-locale", l)
-    setOpen(false)
-    // Dispatch custom event so other components can react
-    window.dispatchEvent(new CustomEvent("locale-change", { detail: l }))
-  }
 
   return (
     <div ref={ref} className="relative">
@@ -47,7 +35,7 @@ export default function LanguageToggle() {
           {locales.map((l) => (
             <button
               key={l}
-              onClick={() => selectLocale(l)}
+              onClick={() => { setLocale(l); setOpen(false) }}
               className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left hover:bg-surface-50 transition-colors ${
                 l === locale ? "bg-primary-50 text-primary-700 font-bold" : "text-surface-600"
               }`}
