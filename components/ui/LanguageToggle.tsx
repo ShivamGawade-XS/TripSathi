@@ -1,29 +1,64 @@
 "use client"
-import { useState } from "react"
-import { Locale, localeNames } from "@/lib/i18n"
+import { useState, useRef, useEffect } from "react"
+import { Locale, locales, localeNames, localeFlags } from "@/lib/i18n"
 
-interface LanguageToggleProps {
-  defaultLocale?: Locale
-  onLocaleChange?: (locale: Locale) => void
-}
+export default function LanguageToggle() {
+  const [locale, setLocale] = useState<Locale>("en")
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
 
-export default function LanguageToggle({ defaultLocale = "en", onLocaleChange }: LanguageToggleProps) {
-  const [locale, setLocale] = useState<Locale>(defaultLocale)
+  useEffect(() => {
+    const saved = localStorage.getItem("tripsathi-locale") as Locale | null
+    if (saved && locales.includes(saved)) setLocale(saved)
+  }, [])
 
-  const handleToggle = () => {
-    const newLocale: Locale = locale === "en" ? "hi" : "en"
-    setLocale(newLocale)
-    onLocaleChange?.(newLocale)
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener("mousedown", handleClick)
+    return () => document.removeEventListener("mousedown", handleClick)
+  }, [])
+
+  const selectLocale = (l: Locale) => {
+    setLocale(l)
+    localStorage.setItem("tripsathi-locale", l)
+    setOpen(false)
+    // Dispatch custom event so other components can react
+    window.dispatchEvent(new CustomEvent("locale-change", { detail: l }))
   }
 
   return (
-    <button
-      onClick={handleToggle}
-      className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-100 hover:bg-surface-200 transition-all duration-200 text-sm font-medium text-surface-700"
-      aria-label={`Switch to ${locale === "en" ? "Hindi" : "English"}`}
-    >
-      <span className="text-base">{locale === "en" ? "🇮🇳" : "🇬🇧"}</span>
-      <span>{localeNames[locale]}</span>
-    </button>
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-100 hover:bg-surface-200 transition-all duration-200 text-sm font-medium text-surface-700"
+        aria-label="Change language"
+      >
+        <span className="text-base">{localeFlags[locale]}</span>
+        <span>{localeNames[locale]}</span>
+        <svg className={`w-3 h-3 transition-transform ${open ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {open && (
+        <div className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-xl border border-surface-200 overflow-hidden z-50 min-w-[160px] animate-slide-down">
+          {locales.map((l) => (
+            <button
+              key={l}
+              onClick={() => selectLocale(l)}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left hover:bg-surface-50 transition-colors ${
+                l === locale ? "bg-primary-50 text-primary-700 font-bold" : "text-surface-600"
+              }`}
+            >
+              <span>{localeFlags[l]}</span>
+              <span>{localeNames[l]}</span>
+              {l === locale && <span className="ml-auto text-primary-600">✓</span>}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   )
 }

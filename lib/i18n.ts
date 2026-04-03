@@ -1,12 +1,23 @@
-export type Locale = "en" | "hi"
+export type Locale = "en" | "hi" | "ta" | "te" | "mr"
 
 export const defaultLocale: Locale = "en"
 
-export const locales: Locale[] = ["en", "hi"]
+export const locales: Locale[] = ["en", "hi", "ta", "te", "mr"]
 
 export const localeNames: Record<Locale, string> = {
   en: "English",
   hi: "हिंदी",
+  ta: "தமிழ்",
+  te: "తెలుగు",
+  mr: "मराठी",
+}
+
+export const localeFlags: Record<Locale, string> = {
+  en: "🇬🇧",
+  hi: "🇮🇳",
+  ta: "🇮🇳",
+  te: "🇮🇳",
+  mr: "🇮🇳",
 }
 
 // load translations for a given locale
