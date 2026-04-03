@@ -24,6 +24,7 @@ export default function ProfilePage() {
   const handleLogout = () => {
     localStorage.removeItem("tripsathi_token")
     localStorage.removeItem("tripsathi_user")
+    window.dispatchEvent(new Event("auth-change"))
     router.push("/")
   }
 

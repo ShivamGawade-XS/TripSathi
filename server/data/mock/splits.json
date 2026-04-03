@@ -28,5 +28,18 @@
     ],
     "createdAt": "2026-04-03T19:41:28.082Z",
     "updatedAt": "2026-04-03T19:41:28.101Z"
+  },
+  "8CA8D9": {
+    "code": "8CA8D9",
+    "name": "Test Trip",
+    "travelers": [
+      {
+        "id": "T1",
+        "name": "You"
+      }
+    ],
+    "expenses": [],
+    "createdAt": "2026-04-03T19:46:02.983Z",
+    "updatedAt": "2026-04-03T19:46:02.983Z"
   }
 }

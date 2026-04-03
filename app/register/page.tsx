@@ -23,6 +23,7 @@ export default function RegisterPage() {
       const data = await registerApi(name, email, password)
       localStorage.setItem("tripsathi_token", data.token)
       localStorage.setItem("tripsathi_user", JSON.stringify(data))
+      window.dispatchEvent(new Event("auth-change"))
       router.push("/dashboard")
     } catch (err) {
       setError(err instanceof Error ? err.message : "Registration failed")

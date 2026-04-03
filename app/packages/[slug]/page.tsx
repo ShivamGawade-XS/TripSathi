@@ -23,7 +23,14 @@ function ImageGallery({ images, title }: { images: string[]; title: string }) {
   return (
     <div>
       <div className="relative h-72 md:h-96 rounded-2xl overflow-hidden">
-        <img src={images[active]} alt={title} className="w-full h-full object-cover transition-all duration-500" />
+        <div 
+          className="flex transition-transform duration-500 ease-in-out h-full"
+          style={{ transform: `translateX(-${active * 100}%)` }}
+        >
+          {images.map((img, i) => (
+            <img key={i} src={img} alt={`${title} - image ${i + 1}`} className="w-full h-full object-cover flex-shrink-0" />
+          ))}
+        </div>
         <div className="absolute bottom-4 right-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm">{active + 1} / {images.length}</div>
       </div>
       <div className="flex gap-2 mt-3 overflow-x-auto pb-2">

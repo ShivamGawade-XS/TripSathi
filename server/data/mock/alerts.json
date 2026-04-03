@@ -1,5 +1,18 @@
 [
   {
+    "id": "PA002-mnjbcxwo",
+    "route": "Chennai → Hyderabad",
+    "from": "Chennai",
+    "to": "Hyderabad",
+    "mode": "Train",
+    "quota": "Tatkal",
+    "threshold": 900,
+    "currentPrice": 900,
+    "status": "triggered",
+    "createdAt": "2026-04-03",
+    "notified": false
+  },
+  {
     "id": "PA001-mnjb7iwx",
     "route": "Delhi → Mumbai",
     "from": "Delhi",
