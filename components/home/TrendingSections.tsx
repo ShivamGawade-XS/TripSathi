@@ -21,7 +21,7 @@ export default function TrendingSections() {
       {pkgs.map(pkg => {
         const discount = Math.round(((pkg.price.original - pkg.price.discounted) / pkg.price.original) * 100)
         return (
-          <Link key={pkg.id} href={`/packages/${pkg.slug}`} className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all hover:-translate-y-1">
+          <Link key={pkg.id} href={`/packages/${pkg.slug}`} className="group rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all hover:-translate-y-1" style={{ background: "var(--bg-card)" }}>
             <div className="relative h-44 overflow-hidden">
               <img src={pkg.coverImage} alt={pkg.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
               <span className="absolute top-3 left-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full">{badge}</span>

@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useLanguage } from "@/context/LanguageContext"
 
@@ -25,7 +25,7 @@ interface PackageCardProps {
 function PackageCard({ pkg }: PackageCardProps) {
   const discount = Math.round(((pkg.price.original - pkg.price.discounted) / pkg.price.original) * 100)
   return (
-    <Link href={`/packages/${pkg.slug}`} className="group block bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+    <Link href={`/packages/${pkg.slug}`} className="group block rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1" style={{ background: "var(--bg-card)" }}>
       <div className="relative h-52 overflow-hidden">
         <img src={pkg.coverImage} alt={pkg.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
         {pkg.featured && <span className="absolute top-3 left-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full">⭐ Featured</span>}
@@ -86,7 +86,7 @@ export default function PackagesPage() {
     setLoading(false)
   }
 
-  useState(() => { fetchPackages("all", "") })
+  useEffect(() => { fetchPackages("all", "") }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleCategory = (cat: string) => { setActiveCategory(cat); fetchPackages(cat, sort) }
   const handleSort = (s: string) => { setSort(s); fetchPackages(activeCategory, s) }
@@ -100,7 +100,7 @@ export default function PackagesPage() {
         </div>
       </div>
       <div className="max-w-7xl mx-auto px-4 -mt-8">
-        <div className="bg-white rounded-2xl shadow-lg p-4 flex flex-wrap gap-2 items-center justify-between">
+        <div className="rounded-2xl shadow-lg p-4 flex flex-wrap gap-2 items-center justify-between" style={{ background: "var(--bg-card)" }}>
           <div className="flex flex-wrap gap-2">
             {categories.map(cat => (
               <button key={cat.id} onClick={() => handleCategory(cat.id)}

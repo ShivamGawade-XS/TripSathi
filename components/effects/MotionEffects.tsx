@@ -209,6 +209,8 @@ export function Parallax({ children, speed = 0.3, className = "" }: ParallaxProp
   useEffect(() => {
     const el = ref.current
     if (!el) return
+    // Skip parallax on touch devices (saves battery)
+    if (window.matchMedia("(pointer: coarse)").matches) return
     const handleScroll = () => {
       const rect = el.getBoundingClientRect()
       const offset = (rect.top - window.innerHeight / 2) * speed

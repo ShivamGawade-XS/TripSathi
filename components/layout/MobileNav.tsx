@@ -15,7 +15,7 @@ export default function MobileNav() {
   const pathname = usePathname()
   const { t } = useLanguage()
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-surface-200 safe-area-bottom">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-surface-200 safe-area-bottom" style={{ background: "var(--bg-card)", transition: "background 0.4s ease" }}>
       <div className="flex items-center justify-around py-2">
         {navItems.map((item) => (
           <Link key={item.href} href={item.href} className={`flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-lg transition-colors ${pathname === item.href ? "text-primary-600" : "text-surface-400 hover:text-surface-600"}`}>

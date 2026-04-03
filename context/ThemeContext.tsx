@@ -19,8 +19,18 @@ const ThemeContext = createContext<ThemeContextType>({
 })
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [mode, setMode] = useState<ThemeMode>("light")
-  const [flavor, setFlavor] = useState<ThemeFlavor>("default")
+  const [mode, setMode] = useState<ThemeMode>(() => {
+    if (typeof window !== "undefined") {
+      return (localStorage.getItem("tripsathi_theme_mode") as ThemeMode) || "light"
+    }
+    return "light"
+  })
+  const [flavor, setFlavor] = useState<ThemeFlavor>(() => {
+    if (typeof window !== "undefined") {
+      return (localStorage.getItem("tripsathi_theme_flavor") as ThemeFlavor) || "default"
+    }
+    return "default"
+  })
 
   useEffect(() => {
     const savedMode = localStorage.getItem("tripsathi_theme_mode") as ThemeMode | null

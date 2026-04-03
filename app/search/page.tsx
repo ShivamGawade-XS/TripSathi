@@ -50,7 +50,7 @@ function SearchContent() {
       {loading && (
         <div className="py-20">
           <Spinner size="lg" />
-          <p className="text-center text-surface-500 mt-4">Searching across all providers...</p>
+          <p className="text-center text-surface-500 mt-4">{t("search_loading") || "Searching across all providers..."}</p>
         </div>
       )}
 
@@ -68,8 +68,8 @@ function SearchContent() {
 
       {!results && !loading && !error && from === "" && (
         <EmptyState
-          title="Search for your next trip"
-          description="Enter your departure and destination cities above to find trains, buses, and hotels."
+          title={t("search_empty_title") || "Search for your next trip"}
+          description={t("search_empty_desc") || "Enter your departure and destination cities above to find trains, buses, and hotels."}
           icon="🔍"
         />
       )}

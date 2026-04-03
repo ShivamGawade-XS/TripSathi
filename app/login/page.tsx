@@ -85,7 +85,7 @@ export default function LoginPage() {
           </button>
 
           <p className="text-center text-sm text-surface-500 mt-4">
-            Don&apos;t have an account?{" "}
+            {t("login_no_account") || "Don\u0027t have an account?"}{" "}
             <Link href="/register" className="text-primary-600 hover:text-primary-700 font-medium">
               {t("nav_register")}
             </Link>

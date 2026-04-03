@@ -176,7 +176,7 @@ export default function ChatWidget() {
         </button>
       )}
       {open && (
-        <div className="fixed bottom-6 right-6 z-50 w-[360px] max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-surface-200 md:bottom-6 bottom-20" style={{ height: "500px" }}>
+        <div className="fixed bottom-6 right-6 z-50 w-[360px] max-w-[calc(100vw-2rem)] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-surface-200 md:bottom-6 bottom-20" style={{ height: "500px", background: "var(--bg-card)" }}>
           <div className="bg-gradient-to-r from-primary-600 to-accent-500 text-white px-5 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-lg">🤖</div>
@@ -191,14 +191,14 @@ export default function ChatWidget() {
           <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-surface-50">
             {messages.map((msg, i) => (
               <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                <div className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${msg.role === "user" ? "bg-primary-600 text-white rounded-br-md" : "bg-white text-surface-700 rounded-bl-md shadow-sm"}`}>
+                <div className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${msg.role === "user" ? "bg-primary-600 text-white rounded-br-md" : "text-surface-700 rounded-bl-md shadow-sm"}`} style={msg.role === "bot" ? { background: "var(--bg-card-hover)" } : {}}>
                   {msg.text}
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="px-3 py-2 bg-white border-t border-surface-100">
+          <div className="px-3 py-2 border-t border-surface-100" style={{ background: "var(--bg-card)" }}>
             <div className="flex flex-wrap gap-1 mb-2">
               {quickReplies.map((qr, i) => (
                 <button key={i} onClick={() => send(qr)} className="text-xs bg-primary-50 text-primary-700 px-3 py-1.5 rounded-full hover:bg-primary-100 transition-colors">{qr}</button>
