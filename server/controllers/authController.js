@@ -35,4 +35,37 @@ const registerUser = async (req, res) => {
   }
 }
 
-module.exports = { registerUser }
+// login user
+// POST /api/v1/auth/login
+const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body
+
+    // find user by email
+    const user = await User.findOne({ email })
+    if (!user) {
+      return res.status(401).json({ message: "Invalid email or password" })
+    }
+
+    // check password
+    const isMatch = await user.comparePassword(password)
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid email or password" })
+    }
+
+    const token = generateToken(user._id)
+
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      language: user.language,
+      token,
+    })
+  } catch (error) {
+    console.error("Login error:", error.message)
+    res.status(500).json({ message: "Server error during login" })
+  }
+}
+
+module.exports = { registerUser, loginUser }
