@@ -1,6 +1,7 @@
 "use client"
 import Link from "next/link"
 import { useLanguage } from "@/context/LanguageContext"
+import { Reveal, Tilt3D, StaggerReveal } from "@/components/effects/MotionEffects"
 
 const routes = [
   { from: "Delhi", to: "Mumbai", price: "₹850", emoji: "🏙️" },
@@ -25,22 +26,26 @@ export default function PopularRoutes() {
   return (
     <section className="section-padding bg-surface-50">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-surface-900 mb-4"><span className="gradient-text">{t.title}</span></h2>
-          <p className="text-surface-500 text-lg">{t.subtitle}</p>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <Reveal direction="up">
+          <div className="text-center mb-12">
+            <h2 className="text-surface-900 mb-4"><span className="gradient-text">{t.title}</span></h2>
+            <p className="text-surface-500 text-lg">{t.subtitle}</p>
+          </div>
+        </Reveal>
+        <StaggerReveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" staggerDelay={80}>
           {routes.map((route) => (
-            <Link key={`${route.from}-${route.to}`} href={`/search?from=${route.from}&to=${route.to}`} className="card flex items-center gap-4 hover:-translate-y-1 group">
-              <div className="text-3xl">{route.emoji}</div>
-              <div className="flex-1">
-                <div className="font-semibold text-surface-900">{route.from} → {route.to}</div>
-                <div className="text-sm text-surface-500">{t.starting}</div>
-              </div>
-              <div className="text-lg font-bold text-primary-600 group-hover:text-primary-700">{route.price}</div>
-            </Link>
+            <Tilt3D key={`${route.from}-${route.to}`} intensity={5}>
+              <Link href={`/search?from=${route.from}&to=${route.to}`} className="card flex items-center gap-4 group">
+                <div className="text-3xl group-hover:scale-125 group-hover:-rotate-12 transition-all duration-500">{route.emoji}</div>
+                <div className="flex-1">
+                  <div className="font-semibold text-surface-900">{route.from} → {route.to}</div>
+                  <div className="text-sm text-surface-500">{t.starting}</div>
+                </div>
+                <div className="text-lg font-bold text-primary-600 group-hover:text-primary-700 group-hover:scale-110 transition-all duration-300">{route.price}</div>
+              </Link>
+            </Tilt3D>
           ))}
-        </div>
+        </StaggerReveal>
       </div>
     </section>
   )

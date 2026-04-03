@@ -453,3 +453,68 @@
 [data-theme-flavor="stranger"] .bg-surface-900 {
   background-color: var(--bg-footer) !important;
 }
+
+/* ================================================================
+   ANIMATION KEYFRAMES
+   ================================================================ */
+@keyframes float {
+  0% { transform: translateY(0px) translateX(0px); }
+  100% { transform: translateY(-20px) translateX(8px); }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* Smooth hover lift for all interactive cards */
+.card {
+  transition: transform 0.4s cubic-bezier(0.03,0.98,0.52,0.99), box-shadow 0.4s ease, border-color 0.4s ease !important;
+}
+
+/* Premium shimmer loading skeleton */
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-card-hover) 50%, var(--bg-card) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* Image hover zoom (used in TrendingSections) */
+.img-zoom {
+  transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.img-zoom:hover, .group:hover .img-zoom {
+  transform: scale(1.08);
+}
+
+/* Body smooth transition helper */
+* {
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
+/* Focus ring global override for theme */
+:focus-visible {
+  outline: 2px solid var(--text-link);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Smooth page transition */
+main {
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}

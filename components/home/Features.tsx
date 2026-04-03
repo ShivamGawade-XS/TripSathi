@@ -1,5 +1,6 @@
 "use client"
 import { useLanguage } from "@/context/LanguageContext"
+import { Reveal, Tilt3D, StaggerReveal } from "@/components/effects/MotionEffects"
 
 const icons = [
   "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z",
@@ -21,25 +22,25 @@ export default function Features() {
   return (
     <section id="features" className="section-padding bg-white">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-surface-900 mb-4">{t("features_title")}</h2>
-          <p className="text-surface-500 text-lg max-w-2xl mx-auto">
-            {t("hero_subtitle")}
-          </p>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Reveal direction="up">
+          <div className="text-center mb-16">
+            <h2 className="text-surface-900 mb-4">{t("features_title")}</h2>
+            <p className="text-surface-500 text-lg max-w-2xl mx-auto">{t("hero_subtitle")}</p>
+          </div>
+        </Reveal>
+        <StaggerReveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" staggerDelay={120}>
           {features.map((f, i) => (
-            <div key={i} className="card group hover:-translate-y-1">
-              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${colors[i]} flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform duration-300`}>
+            <Tilt3D key={i} className="card group cursor-default">
+              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${colors[i]} flex items-center justify-center text-white mb-4 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}>
                 <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={icons[i]} />
                 </svg>
               </div>
               <h3 className="text-lg font-semibold text-surface-900 mb-2">{f.title}</h3>
               <p className="text-surface-500 text-sm leading-relaxed">{f.desc}</p>
-            </div>
+            </Tilt3D>
           ))}
-        </div>
+        </StaggerReveal>
       </div>
     </section>
   )
