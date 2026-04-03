@@ -7,14 +7,14 @@ export default function Hero() {
   const { t } = useLanguage()
   return (
     <section className="relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-accent-50" />
+      <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, var(--bg-hero-gradient-from), var(--bg-hero-gradient-via), var(--bg-hero-gradient-to))", transition: "background 0.4s ease" }} />
 
       {/* Parallax floating blobs */}
       <Parallax speed={0.2}>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-primary-200/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
+        <div className="absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" style={{ background: "var(--bg-hero-blob1)" }} />
       </Parallax>
       <Parallax speed={-0.15}>
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-accent-200/30 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4" style={{ background: "var(--bg-hero-blob2)" }} />
       </Parallax>
 
       {/* Floating particles */}
