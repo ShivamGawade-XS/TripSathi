@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   description:
     "TripSathi unifies trains, buses, hotels, and itinerary planning into one seamless platform built for every Indian traveler.",
   manifest: "/manifest.json",
+}
+
+export const viewport = {
   themeColor: "#4F46E5",
 }
 
