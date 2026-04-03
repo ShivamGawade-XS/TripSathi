@@ -1,6 +1,7 @@
 "use client"
 import { useState } from "react"
 import Link from "next/link"
+import LanguageToggle from "@/components/ui/LanguageToggle"
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -14,10 +15,13 @@ export default function Header() {
             </div>
             <span className="font-display text-xl font-bold gradient-text">TripSathi</span>
           </Link>
-          <nav className="hidden md:flex items-center gap-6">
-            <Link href="/" className="text-surface-600 hover:text-primary-600 font-medium transition-colors">Home</Link>
-            <Link href="/search" className="text-surface-600 hover:text-primary-600 font-medium transition-colors">Search</Link>
-            <Link href="/dashboard" className="text-surface-600 hover:text-primary-600 font-medium transition-colors">Saved Trips</Link>
+          <nav className="hidden md:flex items-center gap-5">
+            <Link href="/" className="text-surface-600 hover:text-primary-600 font-medium transition-colors text-sm">Home</Link>
+            <Link href="/search" className="text-surface-600 hover:text-primary-600 font-medium transition-colors text-sm">Search</Link>
+            <Link href="/packages" className="text-surface-600 hover:text-primary-600 font-medium transition-colors text-sm">Packages</Link>
+            <Link href="/dashboard" className="text-surface-600 hover:text-primary-600 font-medium transition-colors text-sm">My Trips</Link>
+            <Link href="/faq" className="text-surface-600 hover:text-primary-600 font-medium transition-colors text-sm">Help</Link>
+            <LanguageToggle />
             <Link href="/login" className="btn-secondary text-sm py-2 px-4">Login</Link>
             <Link href="/register" className="btn-primary text-sm py-2 px-4">Sign Up</Link>
           </nav>
@@ -36,7 +40,9 @@ export default function Header() {
             <nav className="flex flex-col gap-2">
               <Link href="/" className="px-4 py-2 rounded-lg text-surface-600 hover:bg-surface-100" onClick={() => setMenuOpen(false)}>Home</Link>
               <Link href="/search" className="px-4 py-2 rounded-lg text-surface-600 hover:bg-surface-100" onClick={() => setMenuOpen(false)}>Search</Link>
-              <Link href="/dashboard" className="px-4 py-2 rounded-lg text-surface-600 hover:bg-surface-100" onClick={() => setMenuOpen(false)}>Saved Trips</Link>
+              <Link href="/packages" className="px-4 py-2 rounded-lg text-surface-600 hover:bg-surface-100" onClick={() => setMenuOpen(false)}>Packages</Link>
+              <Link href="/dashboard" className="px-4 py-2 rounded-lg text-surface-600 hover:bg-surface-100" onClick={() => setMenuOpen(false)}>My Trips</Link>
+              <Link href="/faq" className="px-4 py-2 rounded-lg text-surface-600 hover:bg-surface-100" onClick={() => setMenuOpen(false)}>Help & FAQs</Link>
               <div className="flex gap-2 mt-2">
                 <Link href="/login" className="btn-secondary text-sm py-2 px-4 flex-1 text-center">Login</Link>
                 <Link href="/register" className="btn-primary text-sm py-2 px-4 flex-1 text-center">Sign Up</Link>
