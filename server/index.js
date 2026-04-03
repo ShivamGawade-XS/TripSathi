@@ -29,6 +29,7 @@ app.use("/api/v1/bookings", require("./routes/bookings"))
 app.use("/api/v1/faqs", require("./routes/faqs"))
 app.use("/api/v1/alerts", require("./routes/alerts"))
 app.use("/api/v1/split", require("./routes/split"))
+app.use("/api/v1/whatsapp", require("./routes/whatsapp"))
 
 // health check
 app.get("/api/health", (req, res) => {
