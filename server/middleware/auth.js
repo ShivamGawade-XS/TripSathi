@@ -18,6 +18,12 @@ const protect = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
+
+    if (process.env.USE_MOCK_API === "true") {
+      req.user = { _id: "mock-user-123", name: "Demo User", email: "demo@tripsathi.com", language: "en" }
+      return next()
+    }
+
     req.user = await User.findById(decoded.id).select("-passwordHash")
 
     if (!req.user) {

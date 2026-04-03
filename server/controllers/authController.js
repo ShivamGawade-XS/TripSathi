@@ -7,6 +7,11 @@ const registerUser = async (req, res) => {
   try {
     const { name, email, password, language } = req.body
 
+    if (process.env.USE_MOCK_API === "true") {
+      const token = generateToken("mock-user-123")
+      return res.status(201).json({ _id: "mock-user-123", name, email, language: language || "en", token })
+    }
+
     const existingUser = await User.findOne({ email })
     if (existingUser) {
       return res.status(400).json({ message: "User already exists with this email" })
@@ -40,6 +45,11 @@ const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body
 
+    if (process.env.USE_MOCK_API === "true") {
+      const token = generateToken("mock-user-123")
+      return res.json({ _id: "mock-user-123", name: "Demo User", email, language: "en", token })
+    }
+
     const user = await User.findOne({ email })
     if (!user) {
       return res.status(401).json({ message: "Invalid email or password" })
@@ -69,6 +79,13 @@ const loginUser = async (req, res) => {
 // GET /api/v1/auth/me
 const getMe = async (req, res) => {
   try {
+    if (process.env.USE_MOCK_API === "true") {
+      return res.json({
+        _id: "mock-user-123", name: "Demo User", email: "demo@tripsathi.com", 
+        language: "en", createdAt: new Date()
+      })
+    }
+
     const user = await User.findById(req.user._id)
 
     if (!user) {
