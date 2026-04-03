@@ -392,6 +392,11 @@
   color: var(--text-body) !important;
 }
 
+/* Make hero heading pop against the bright diagonal gradient */
+[data-theme-mode="dark"] h1 {
+  text-shadow: 0 2px 20px rgba(0,0,0,0.6), 0 0 40px rgba(0,0,0,0.3);
+}
+
 [data-theme-mode="dark"] .text-surface-600,
 [data-theme-flavor="stranger"] .text-surface-600 {
   color: var(--text-body) !important;
