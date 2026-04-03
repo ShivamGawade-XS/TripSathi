@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import "./globals.css"
+import Layout from "@/components/layout/Layout"
 
 export const metadata: Metadata = {
   title: "TripSathi - One Platform, Every Indian Journey",
@@ -14,7 +15,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <Layout>{children}</Layout>
+      </body>
     </html>
   )
 }
