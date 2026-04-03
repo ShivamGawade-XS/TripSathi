@@ -1,6 +1,7 @@
 const express = require("express")
 const dotenv = require("dotenv")
 const connectDB = require("./utils/db")
+const { connectRedis } = require("./utils/cache")
 const { setupSecurity } = require("./middleware/security")
 
 dotenv.config()
@@ -15,11 +16,13 @@ setupSecurity(app)
 app.use(express.json({ limit: "10mb" }))
 app.use(express.urlencoded({ extended: true }))
 
-// connect to database
+// connect to database and cache
 connectDB()
+connectRedis()
 
 // routes
 app.use("/api/v1/auth", require("./routes/auth"))
+app.use("/api/v1/search", require("./routes/search"))
 
 // health check
 app.get("/api/health", (req, res) => {
