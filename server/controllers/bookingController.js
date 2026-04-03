@@ -11,9 +11,7 @@ const createBooking = async (req, res) => {
 
     const bookingRef = "TS" + Date.now().toString(36).toUpperCase() + crypto.randomBytes(3).toString("hex").toUpperCase()
 
-    // In mock mode, just return a simulated booking without DB
-    const booking = {
-      _id: crypto.randomBytes(12).toString("hex"),
+    const booking = await Booking.create({
       userId: req.user._id,
       type,
       packageId,
@@ -29,10 +27,9 @@ const createBooking = async (req, res) => {
       contactEmail,
       contactPhone,
       specialRequests,
-      bookingRef,
       status: "confirmed",
-      createdAt: new Date().toISOString(),
-    }
+      bookingRef,
+    })
 
     res.status(201).json(booking)
   } catch (error) {
@@ -43,8 +40,8 @@ const createBooking = async (req, res) => {
 
 const getMyBookings = async (req, res) => {
   try {
-    // Return empty array in mock mode — real bookings would come from MongoDB
-    res.json([])
+    const bookings = await Booking.find({ userId: req.user._id }).sort({ createdAt: -1 })
+    res.json(bookings)
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch bookings" })
   }
@@ -52,7 +49,11 @@ const getMyBookings = async (req, res) => {
 
 const getBookingByRef = async (req, res) => {
   try {
-    res.status(404).json({ message: "Booking not found" })
+    const booking = await Booking.findOne({ bookingRef: req.params.ref, userId: req.user._id })
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" })
+    }
+    res.json(booking)
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch booking" })
   }

@@ -9,6 +9,7 @@ import { useLanguage } from "@/context/LanguageContext"
 
 export default function DashboardPage() {
   const [trips, setTrips] = useState<any[]>([])
+  const [bookings, setBookings] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const { locale } = useLanguage()
@@ -29,9 +30,15 @@ export default function DashboardPage() {
       return
     }
 
-    getMyItineraries(token)
-      .then((data) => setTrips(data))
-      .catch(() => setError("Failed to load saved trips"))
+    Promise.all([
+      getMyItineraries(token).catch(() => []),
+      import("@/lib/api").then(m => m.getMyBookings(token)).catch(() => [])
+    ])
+      .then(([tripsData, bookingsData]) => {
+        setTrips(tripsData)
+        setBookings(bookingsData)
+      })
+      .catch(() => setError("Failed to load dashboard"))
       .finally(() => setLoading(false))
   }, [])
 
@@ -67,17 +74,43 @@ export default function DashboardPage() {
         </Link>
       </div>
 
-      {trips.length === 0 ? (
+      {trips.length === 0 && bookings.length === 0 ? (
         <EmptyState
           title={d.noTrips}
           description={d.noTripsDesc}
           icon="✈️"
         />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {trips.map((trip: any) => (
-            <TripCard key={trip._id} trip={trip} />
-          ))}
+        <div className="space-y-8">
+          {trips.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {trips.map((trip: any) => (
+                <TripCard key={trip._id} trip={trip} />
+              ))}
+            </div>
+          )}
+          
+          {bookings.length > 0 && (
+            <div>
+              <h2 className="text-xl font-bold text-surface-900 mb-4">Confirmed Bookings</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {bookings.map((b: any) => (
+                  <div key={b._id} className="card border-l-4 border-l-green-500">
+                    <div className="flex justify-between items-start mb-2">
+                      <span className="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">{b.type}</span>
+                      <span className="text-surface-500 text-sm">{new Date(b.travelDate).toLocaleDateString()}</span>
+                    </div>
+                    <h3 className="font-bold text-lg text-surface-900 line-clamp-1">{b.type === "hotel" ? b.hotel?.name : b.transport?.name}</h3>
+                    <p className="text-surface-500 text-sm mb-3">Ref: {b.bookingRef}</p>
+                    <div className="flex justify-between items-end border-t border-surface-100 pt-3">
+                      <span className="text-surface-600 text-sm">{b.to || "Destination"}</span>
+                      <span className="font-bold text-primary-600">₹{b.totalAmount}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

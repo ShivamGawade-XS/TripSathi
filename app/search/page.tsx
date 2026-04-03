@@ -6,8 +6,9 @@ import ResultsContainer from "@/components/results/ResultsContainer"
 import Spinner from "@/components/ui/Spinner"
 import ErrorCard from "@/components/ui/ErrorCard"
 import EmptyState from "@/components/ui/EmptyState"
-import { searchAll, SearchResponse } from "@/lib/api"
+import { searchAll, SearchResponse, TransportResult, HotelResult } from "@/lib/api"
 import { useLanguage } from "@/context/LanguageContext"
+import CheckoutModal from "@/components/search/CheckoutModal"
 
 function SearchContent() {
   const searchParams = useSearchParams()
@@ -18,6 +19,9 @@ function SearchContent() {
   const [results, setResults] = useState<SearchResponse | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  
+  const [checkoutItem, setCheckoutItem] = useState<TransportResult | HotelResult | null>(null)
+  const [checkoutType, setCheckoutType] = useState<"transport" | "hotel" | null>(null)
 
   useEffect(() => {
     if (from && to) {
@@ -55,7 +59,11 @@ function SearchContent() {
       )}
 
       {results && !loading && (
-        <ResultsContainer data={results} />
+        <ResultsContainer 
+          data={results} 
+          onSelectTransport={(t) => { setCheckoutItem(t); setCheckoutType("transport") }}
+          onSelectHotel={(h) => { setCheckoutItem(h); setCheckoutType("hotel") }}
+        />
       )}
 
       {!results && !loading && !error && from === "" && (
@@ -64,6 +72,10 @@ function SearchContent() {
           description="Enter your departure and destination cities above to find trains, buses, and hotels."
           icon="🔍"
         />
+      )}
+      
+      {checkoutItem && checkoutType && (
+        <CheckoutModal item={checkoutItem} type={checkoutType} onClose={() => { setCheckoutItem(null); setCheckoutType(null) }} />
       )}
     </div>
   )

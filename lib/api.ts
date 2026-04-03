@@ -133,3 +133,11 @@ export async function getSharedItinerary(shareToken: string) {
   if (!res.ok) throw new Error("Shared itinerary not found")
   return res.json()
 }
+
+export async function getMyBookings(token: string) {
+  const res = await fetch(`${API_BASE}/bookings`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  if (!res.ok) throw new Error("Failed to fetch bookings")
+  return res.json()
+}
