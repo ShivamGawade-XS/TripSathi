@@ -38,7 +38,6 @@ export default function Header() {
             <Link href="/dashboard" className="text-surface-600 hover:text-primary-600 font-medium transition-colors text-sm">{t("nav_saved")}</Link>
             <Link href="/faq" className="text-surface-600 hover:text-primary-600 font-medium transition-colors text-sm">{t("nav_help") || "Help"}</Link>
             <LanguageToggle />
-            <LanguageToggle />
             {user ? (
               <Link href="/profile" className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center text-white font-bold ml-2 shadow-sm hover:scale-105 transition-transform">
                 {user.name.charAt(0).toUpperCase()}
@@ -68,7 +67,6 @@ export default function Header() {
               <Link href="/packages" className="px-4 py-2 rounded-lg text-surface-600 hover:bg-surface-100" onClick={() => setMenuOpen(false)}>{t("nav_packages") || "Packages"}</Link>
               <Link href="/dashboard" className="px-4 py-2 rounded-lg text-surface-600 hover:bg-surface-100" onClick={() => setMenuOpen(false)}>{t("nav_saved")}</Link>
               <Link href="/faq" className="px-4 py-2 rounded-lg text-surface-600 hover:bg-surface-100" onClick={() => setMenuOpen(false)}>{t("nav_help") || "Help"}</Link>
-              <div className="px-4 py-2"><LanguageToggle /></div>
               <div className="px-4 py-2"><LanguageToggle /></div>
               {user ? (
                 <div className="px-4 py-2 mt-2 border-t border-surface-100 flex items-center gap-3">
