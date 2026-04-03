@@ -17,11 +17,16 @@ TripSathi follows a layered **3-tier architecture** — UI Layer, Logic Layer, a
 ┌────────────────▼────────────────────┐
 │     React / Next.js 14 Frontend      │  ← Layer 1: UI Layer
 │     (Vercel — SSR + CDN)             │
+│     + Theme System (Light/Dark/      │
+│       Stranger Things)               │
+│     + Premium Animation Effects      │
 └────────────────┬────────────────────┘
                  │ REST API calls
 ┌────────────────▼────────────────────┐
 │     Node.js 20 + Express.js API      │  ← Layer 2: Logic Layer
 │     (Render / Railway)               │
+│     + NLP Chatbot Engine             │
+│     + Route Aggregation Engine       │
 └──────────┬───────────────┬──────────┘
            │               │
 ┌──────────▼──────┐  ┌─────▼───────────┐
@@ -42,13 +47,20 @@ TripSathi follows a layered **3-tier architecture** — UI Layer, Logic Layer, a
 | Technology | Version | Purpose |
 |---|---|---|
 | **React** | 18.x | Component-based UI framework |
-| **Next.js** | 14 | SSR, routing, performance optimization |
+| **Next.js** | 14 | SSR, App Router, performance optimization |
+| **TypeScript** | 5.x | Type-safe development |
 | **Tailwind CSS** | 3.x | Responsive, utility-first styling |
+| **CSS Custom Properties** | — | Theme system (Light/Dark/Stranger Things) |
+| **Google Fonts** | Inter, Outfit | Premium typography |
+| **Canvas API** | — | Custom cursor with particle trail effects |
+| **Intersection Observer** | — | Scroll-triggered entrance reveal animations |
 
 ### Key Frontend Decisions
 - **Next.js SSR** — Server-side rendering ensures fast load times on mobile networks and low-bandwidth environments (critical for Tier-2/3 users)
 - **Tailwind CSS** — Rapid responsive UI development, optimized for 320px+ screen sizes (entry-level Android phones)
-- **i18n-ready** — All strings abstracted for Hindi / English toggle via Next.js 14 App Router dictionary helper
+- **CSS Custom Properties Theme System** — 4 theme combinations (Light Default, Dark Default, Stranger Light, Stranger Dark) driven by `data-theme-mode` and `data-theme-flavor` attributes on `<html>`, with smooth 0.4s transitions
+- **i18n-ready** — All strings abstracted for 5 languages (English, Hindi, Tamil, Telugu, Marathi) via JSON locale dictionaries
+- **Premium Effects Stack** — Scroll reveal, 3D tilt, parallax, custom cursor, magnetic buttons, animated counters, stagger animations, page loader
 
 ---
 
@@ -57,20 +69,63 @@ TripSathi follows a layered **3-tier architecture** — UI Layer, Logic Layer, a
 | Technology | Version | Purpose |
 |---|---|---|
 | **Node.js** | 20 LTS | JavaScript runtime |
-| **Express.js** | 4.x | REST API framework |
+| **Express.js** | 4.18.2 | REST API framework |
+| **bcryptjs** | 2.4.3 | Password hashing |
+| **jsonwebtoken** | 9.0.2 | JWT session management |
+| **helmet** | 7.1.0 | HTTP security headers |
+| **express-rate-limit** | 7.1.5 | API rate limiting |
+| **express-validator** | 7.0.1 | Input sanitization |
+| **uuid** | 9.0.0 | Shareable link token generation |
 
 ### Key Backend Responsibilities
 - Route aggregation: fetches from Transport API + Hotel API simultaneously (parallel `Promise.all` calls)
 - Aggregation engine: sorts & ranks results by price, duration, and rating
 - Itinerary CRUD: create, read, update, delete for saved trip plans
 - Shareable link generation: UUID-based unique links per saved itinerary
-- Mock API fallback: static JSON served when live API keys are unavailable
+- NLP Chatbot engine: regex-based intent parser for booking, PNR, recommendations
+- Packages API: curated travel packages with seasonal/group/top-rated categorization
+- Price Alerts API: route-based alert management
+- Group Split API: expense splitting calculations
+- Mock API fallback: procedurally generated results + static JSON when live API keys unavailable
 
 ### API Design
 - Architecture: REST
 - Auth: JWT (JSON Web Tokens) for protected routes
 - Format: JSON request/response
 - Versioning: `/api/v1/...`
+
+### API Routes
+
+```
+Auth:
+  POST   /api/v1/auth/register       — Create account
+  POST   /api/v1/auth/login          — Login, returns JWT
+  GET    /api/v1/auth/me             — Fetch current user profile
+
+Search:
+  GET    /api/v1/search              — Unified search (transport + hotels)
+  GET    /api/v1/search/transport    — Transport-only results
+  GET    /api/v1/search/hotels       — Hotel-only results
+
+Itinerary:
+  POST   /api/v1/itinerary           — Save a new itinerary
+  GET    /api/v1/itinerary/:id       — Fetch itinerary by ID
+  GET    /api/v1/itinerary/user      — Fetch all for logged-in user
+  DELETE /api/v1/itinerary/:id       — Delete an itinerary
+
+Packages:
+  GET    /api/v1/packages            — List all packages
+  GET    /api/v1/packages/trending   — Seasonal, group deals, top rated
+  GET    /api/v1/packages/:slug      — Package detail
+
+Chatbot:
+  POST   /api/v1/whatsapp/chat       — NLP chatbot message handler
+
+Extras:
+  GET    /api/v1/alerts              — Price alerts management
+  POST   /api/v1/split               — Group expense splitting
+  GET    /api/v1/faqs                — FAQ data
+```
 
 ---
 
@@ -120,6 +175,7 @@ searchHistory → { _id, userId, from, to, date, results[], createdAt }
 | Source | Purpose |
 |---|---|
 | Mock APIs (Static JSON) | Full demo without live API keys — demo-ready on hackathon day |
+| Procedural Generation | Dynamic transport/hotel results for any Indian city pair |
 
 ---
 
@@ -161,11 +217,15 @@ USE_MOCK_API=true   # Set to false in production
 ## 7. Tech Stack Summary Card
 
 ```
-Frontend    → Next.js 14 + React + Tailwind CSS
-Backend     → Node.js 20 + Express.js (REST)
+Frontend    → Next.js 14 + React 18 + TypeScript + Tailwind CSS
+Theming     → CSS Custom Properties (Light/Dark/Stranger Things)
+Effects     → Canvas cursor, Intersection Observer reveals, 3D tilt, Parallax
+Backend     → Node.js 20 + Express.js 4 (REST)
+Chatbot     → Regex NLP intent engine (with Gemini API upgrade path)
 Database    → MongoDB Atlas + Redis Cache
 APIs        → IRCTC, redBus/AbhiBus, OYO, MMT, Goibibo, Google Maps
+i18n        → 5 languages (EN, HI, TA, TE, MR)
+Security    → JWT + bcrypt + helmet + rate-limit + express-validator
 Deploy      → Vercel (FE) + Render/Railway (BE)
-Tools       → GitHub + Postman
-Fallback    → Static JSON Mock APIs
+Fallback    → Static JSON + Procedural Mock APIs
 ```
