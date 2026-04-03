@@ -72,7 +72,7 @@ TripSathi brings it all together:
 
 ## 👥 Team
 
-**Crimson Syndicate** — Built at Hacknovae 7.0
+**Crimson Syndicate** — Built at Hacknovate 7.0
 
 ---
 
