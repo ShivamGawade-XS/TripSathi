@@ -10,10 +10,7 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-600 to-accent-500 flex items-center justify-center">
-              <span className="text-white font-bold text-sm">TS</span>
-            </div>
-            <span className="font-display text-xl font-bold gradient-text">TripSathi</span>
+            <img src="/logo.png" alt="TripSathi Logo" className="h-10 w-auto object-contain drop-shadow-sm" />
           </Link>
           <nav className="hidden md:flex items-center gap-5">
             <Link href="/" className="text-surface-600 hover:text-primary-600 font-medium transition-colors text-sm">Home</Link>

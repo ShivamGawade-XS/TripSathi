@@ -17,8 +17,8 @@ export default function EnhancedFooter() {
       <div className="max-w-7xl mx-auto px-4 py-16">
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
           <div className="col-span-2 md:col-span-1 lg:col-span-2">
-            <Link href="/" className="font-display text-2xl font-bold text-white">
-              🚆 Trip<span className="text-accent-400">Sathi</span>
+            <Link href="/" className="inline-block bg-white/10 hover:bg-white/20 transition-colors p-2 rounded-xl mb-1">
+              <img src="/logo.png" alt="TripSathi Logo" className="h-10 w-auto object-contain drop-shadow" />
             </Link>
             <p className="mt-4 text-surface-400 text-sm leading-relaxed">
               India&apos;s unified travel companion. Compare trains, buses, hotels — all in one place. Plan smarter, travel better.
