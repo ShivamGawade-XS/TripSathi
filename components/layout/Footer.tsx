@@ -24,8 +24,22 @@ export default function EnhancedFooter() {
               India&apos;s unified travel companion. Compare trains, buses, hotels — all in one place. Plan smarter, travel better.
             </p>
             <div className="flex gap-3 mt-6">
-              {["𝕏", "📘", "📸", "🔗"].map((icon, i) => (
-                <a key={i} href="#" className="w-10 h-10 bg-surface-800 hover:bg-primary-600 rounded-xl flex items-center justify-center transition-colors text-sm">{icon}</a>
+              {[
+                { icon: "𝕏", url: "https://x.com/tripsathi", label: "X" },
+                { icon: "📘", url: "https://facebook.com/tripsathi", label: "Facebook" },
+                { icon: "📸", url: "https://instagram.com/tripsathi", label: "Instagram" },
+                { icon: "🔗", url: "https://linkedin.com/company/tripsathi", label: "LinkedIn" }
+              ].map((social, i) => (
+                <a 
+                  key={i} 
+                  href={social.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  aria-label={social.label}
+                  className="w-10 h-10 bg-surface-800 hover:bg-primary-600 rounded-xl flex items-center justify-center transition-colors text-sm"
+                >
+                  {social.icon}
+                </a>
               ))}
             </div>
           </div>
