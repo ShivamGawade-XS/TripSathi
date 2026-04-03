@@ -27,6 +27,8 @@ app.use("/api/v1/itinerary", require("./routes/itinerary"))
 app.use("/api/v1/packages", require("./routes/packages"))
 app.use("/api/v1/bookings", require("./routes/bookings"))
 app.use("/api/v1/faqs", require("./routes/faqs"))
+app.use("/api/v1/alerts", require("./routes/alerts"))
+app.use("/api/v1/split", require("./routes/split"))
 
 // health check
 app.get("/api/health", (req, res) => {
