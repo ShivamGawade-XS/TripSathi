@@ -1,6 +1,7 @@
 "use client"
 import { useState } from "react"
 import Link from "next/link"
+import { useLanguage } from "@/context/LanguageContext"
 
 const categories = [
   { id: "all", label: "All", icon: "🌍" },
@@ -60,6 +61,17 @@ export default function PackagesPage() {
   const [activeCategory, setActiveCategory] = useState("all")
   const [loading, setLoading] = useState(true)
   const [sort, setSort] = useState("")
+  const { locale } = useLanguage()
+
+  const pkgStr: Record<string, Record<string, string>> = {
+    en: { title: "Tour Packages", subtitle: "Curated travel experiences across incredible India", sortBy: "Sort by", priceLow: "Price: Low to High", priceHigh: "Price: High to Low", rated: "Highest Rated", shortest: "Shortest First", none: "No packages found", all: "All", heritage: "Heritage", beach: "Beach", adventure: "Adventure", pilgrimage: "Pilgrimage", honeymoon: "Honeymoon", family: "Family" },
+    hi: { title: "टूर पैकेज", subtitle: "अविश्वसनीय भारत में क्यूरेटेड यात्रा अनुभव", sortBy: "क्रमबद्ध करें", priceLow: "कम कीमत", priceHigh: "अधिक कीमत", rated: "सर्वोच्च रेटेड", shortest: "सबसे छोटा", none: "कोई पैकेज नहीं मिला", all: "सभी", heritage: "विरासत", beach: "समुद्र तट", adventure: "रोमांच", pilgrimage: "तीर्थयात्रा", honeymoon: "हनीमून", family: "परिवार" },
+    ta: { title: "டூர் பேக்கேஜ்கள்", subtitle: "அதிசய இந்தியா முழுவதும் சிறந்த பயண அனுபவங்கள்", sortBy: "வரிசைப்படுத்து", priceLow: "குறைந்த விலை", priceHigh: "அதிக விலை", rated: "அதிக மதிப்பீடு", shortest: "குறுகிய", none: "பேக்கேஜ்கள் இல்லை", all: "அனைத்தும்", heritage: "பாரம்பரியம்", beach: "கடற்கரை", adventure: "சாகசம்", pilgrimage: "யாத்திரை", honeymoon: "ஹனிமூன்", family: "குடும்பம்" },
+    te: { title: "టూర్ ప్యాకేజీలు", subtitle: "అద్భుతమైన భారతదేశంలో క్యూరేటెడ్ ప్రయాణ అనుభవాలు", sortBy: "క్రమీకరించు", priceLow: "తక్కువ ధర", priceHigh: "ఎక్కువ ధర", rated: "అధిక రేటింగ్", shortest: "తక్కువ", none: "ప్యాకేజీలు కనుగొనబడలేదు", all: "అన్నీ", heritage: "వారసత్వం", beach: "బీచ్", adventure: "సాహసం", pilgrimage: "తీర్థయాత్ర", honeymoon: "హనీమూన్", family: "కుటుంబం" },
+    mr: { title: "टूर पॅकेजेस", subtitle: "अविश्वसनीय भारतातील क्यूरेटेड प्रवास अनुभव", sortBy: "क्रमवारी", priceLow: "कमी किंमत", priceHigh: "अधिक किंमत", rated: "सर्वोच्च रेटेड", shortest: "सर्वात लहान", none: "पॅकेजेस सापडले नाहीत", all: "सर्व", heritage: "वारसा", beach: "समुद्रकिनारा", adventure: "साहस", pilgrimage: "तीर्थयात्रा", honeymoon: "हनीमून", family: "कुटुंब" },
+  }
+  const ps = pkgStr[locale] || pkgStr.en
+  const catLabels: Record<string, string> = { all: ps.all, heritage: ps.heritage, beach: ps.beach, adventure: ps.adventure, pilgrimage: ps.pilgrimage, honeymoon: ps.honeymoon, family: ps.family }
 
   const fetchPackages = async (cat: string, sortBy: string) => {
     setLoading(true)
@@ -83,8 +95,8 @@ export default function PackagesPage() {
     <div className="min-h-screen bg-surface-50">
       <div className="bg-gradient-to-br from-primary-600 via-primary-700 to-accent-600 text-white py-16">
         <div className="max-w-7xl mx-auto px-4">
-          <h1 className="font-display text-4xl md:text-5xl font-bold">Tour Packages</h1>
-          <p className="mt-3 text-white/80 text-lg">Curated travel experiences across incredible India</p>
+          <h1 className="font-display text-4xl md:text-5xl font-bold">{ps.title}</h1>
+          <p className="mt-3 text-white/80 text-lg">{ps.subtitle}</p>
         </div>
       </div>
       <div className="max-w-7xl mx-auto px-4 -mt-8">
@@ -93,16 +105,16 @@ export default function PackagesPage() {
             {categories.map(cat => (
               <button key={cat.id} onClick={() => handleCategory(cat.id)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${activeCategory === cat.id ? "bg-primary-600 text-white shadow-md" : "bg-surface-100 text-surface-600 hover:bg-surface-200"}`}>
-                {cat.icon} {cat.label}
+                {cat.icon} {catLabels[cat.id] || cat.label}
               </button>
             ))}
           </div>
           <select value={sort} onChange={e => handleSort(e.target.value)} className="px-4 py-2 rounded-xl border border-surface-200 text-sm bg-white">
-            <option value="">Sort by</option>
-            <option value="price">Price: Low to High</option>
-            <option value="price_desc">Price: High to Low</option>
-            <option value="rating">Highest Rated</option>
-            <option value="duration">Shortest First</option>
+            <option value="">{ps.sortBy}</option>
+            <option value="price">{ps.priceLow}</option>
+            <option value="price_desc">{ps.priceHigh}</option>
+            <option value="rating">{ps.rated}</option>
+            <option value="duration">{ps.shortest}</option>
           </select>
         </div>
 
@@ -111,7 +123,7 @@ export default function PackagesPage() {
             {[1,2,3].map(i => <div key={i} className="bg-white rounded-2xl h-96 animate-pulse" />)}
           </div>
         ) : packages.length === 0 ? (
-          <div className="text-center py-20"><p className="text-surface-400 text-lg">No packages found</p></div>
+          <div className="text-center py-20"><p className="text-surface-400 text-lg">{ps.none}</p></div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 pb-12">
             {packages.map(pkg => <PackageCard key={pkg.id} pkg={pkg} />)}

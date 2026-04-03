@@ -3,12 +3,14 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import CityInput from "./CityInput"
 import DatePicker from "./DatePicker"
+import { useLanguage } from "@/context/LanguageContext"
 
 export default function SearchBar() {
   const router = useRouter()
   const [from, setFrom] = useState("")
   const [to, setTo] = useState("")
   const [date, setDate] = useState("")
+  const { t } = useLanguage()
 
   const handleSearch = () => {
     if (!from || !to) return
@@ -21,8 +23,8 @@ export default function SearchBar() {
     <div className="card p-4 sm:p-6">
       <div className="flex flex-col lg:flex-row gap-4">
         <CityInput
-          label="From"
-          placeholder="Departure city"
+          label={t("search_placeholder_from")}
+          placeholder={t("search_placeholder_from")}
           value={from}
           onChange={setFrom}
           icon={
@@ -47,8 +49,8 @@ export default function SearchBar() {
         </div>
 
         <CityInput
-          label="To"
-          placeholder="Destination city"
+          label={t("search_placeholder_to")}
+          placeholder={t("search_placeholder_to")}
           value={to}
           onChange={setTo}
           icon={
@@ -59,7 +61,7 @@ export default function SearchBar() {
           }
         />
 
-        <DatePicker label="Travel Date" value={date} onChange={setDate} />
+        <DatePicker label={t("search_placeholder_date")} value={date} onChange={setDate} />
 
         <div className="flex items-end">
           <button
@@ -71,7 +73,7 @@ export default function SearchBar() {
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
-              Search
+              {t("search_button")}
             </span>
           </button>
         </div>
