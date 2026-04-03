@@ -48,7 +48,7 @@ TripSathi follows a layered **3-tier architecture** — UI Layer, Logic Layer, a
 ### Key Frontend Decisions
 - **Next.js SSR** — Server-side rendering ensures fast load times on mobile networks and low-bandwidth environments (critical for Tier-2/3 users)
 - **Tailwind CSS** — Rapid responsive UI development, optimized for 320px+ screen sizes (entry-level Android phones)
-- **i18n-ready** — All strings abstracted for Hindi / English toggle via `next-i18next`
+- **i18n-ready** — All strings abstracted for Hindi / English toggle via Next.js 14 App Router dictionary helper
 
 ---
 

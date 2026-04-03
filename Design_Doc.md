@@ -224,7 +224,7 @@ Input: { from, to, date }
 
 ### 7.3 Accessibility & Language
 - Language toggle (EN / हिंदी) persistent in header
-- i18n via `next-i18next` — all strings externalized
+- i18n via Next 14 dictionaries — all strings externalized
 - High contrast mode support
 
 ### 7.4 Key Screens
