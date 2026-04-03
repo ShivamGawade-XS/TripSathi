@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter, usePathname } from "next/navigation"
 import LanguageToggle from "@/components/ui/LanguageToggle"
+import ThemeToggle from "@/components/ui/ThemeToggle"
 import Logo from "@/components/ui/Logo"
 import { useLanguage } from "@/context/LanguageContext"
 
@@ -52,6 +53,7 @@ export default function Header() {
             <Link href="/packages" className="text-surface-600 hover:text-primary-600 font-medium transition-colors text-sm">{t("nav_packages") || "Packages"}</Link>
             <Link href="/dashboard" className="text-surface-600 hover:text-primary-600 font-medium transition-colors text-sm">{t("nav_saved")}</Link>
             <Link href="/faq" className="text-surface-600 hover:text-primary-600 font-medium transition-colors text-sm">{t("nav_help") || "Help"}</Link>
+            <ThemeToggle />
             <LanguageToggle />
             {user ? (
               <Link href="/profile" className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center text-white font-bold ml-2 shadow-sm hover:scale-105 transition-transform">
@@ -82,7 +84,10 @@ export default function Header() {
               <Link href="/packages" className="px-4 py-2 rounded-lg text-surface-600 hover:bg-surface-100" onClick={() => setMenuOpen(false)}>{t("nav_packages") || "Packages"}</Link>
               <Link href="/dashboard" className="px-4 py-2 rounded-lg text-surface-600 hover:bg-surface-100" onClick={() => setMenuOpen(false)}>{t("nav_saved")}</Link>
               <Link href="/faq" className="px-4 py-2 rounded-lg text-surface-600 hover:bg-surface-100" onClick={() => setMenuOpen(false)}>{t("nav_help") || "Help"}</Link>
-              <div className="px-4 py-2"><LanguageToggle /></div>
+              <div className="px-4 py-2 flex items-center gap-2">
+                <ThemeToggle />
+                <LanguageToggle />
+              </div>
               {user ? (
                 <div className="px-4 py-2 mt-2 border-t border-surface-100 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center text-white font-bold">
