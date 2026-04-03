@@ -22,6 +22,29 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
+
+  h1,
+  h2,
+  h3 {
+    font-family: "Outfit", system-ui, sans-serif;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+  }
+
+  h2 {
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: 700;
+  }
+
+  h3 {
+    font-size: clamp(1.125rem, 2vw, 1.5rem);
+    font-weight: 600;
+  }
 }
 
 @layer components {
@@ -72,5 +95,54 @@
 
   .section-padding {
     @apply px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24;
+  }
+
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-train {
+    @apply badge bg-blue-100 text-blue-800;
+  }
+
+  .badge-bus {
+    @apply badge bg-green-100 text-green-800;
+  }
+
+  .badge-hotel {
+    @apply badge bg-purple-100 text-purple-800;
+  }
+}
+
+/* custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* responsive fixes */
+@media (max-width: 640px) {
+  .card {
+    @apply p-4;
+  }
+
+  .section-padding {
+    @apply py-12;
   }
 }
