@@ -1,12 +1,15 @@
 "use client"
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { useRouter, usePathname } from "next/navigation"
 import LanguageToggle from "@/components/ui/LanguageToggle"
 import { useLanguage } from "@/context/LanguageContext"
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const { t } = useLanguage()
+  const router = useRouter()
+  const pathname = usePathname()
   const [user, setUser] = useState<{name: string} | null>(null)
 
   const checkUser = () => {
@@ -28,9 +31,20 @@ export default function Header() {
     <header className="sticky top-0 z-50 glass">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center gap-2">
-            <img src="/logo.png" alt="TripSathi Logo" className="max-h-10 w-auto object-contain drop-shadow-sm" />
-          </Link>
+          <div className="flex items-center gap-3">
+            {pathname !== "/" && (
+              <button 
+                onClick={() => router.back()} 
+                className="flex items-center justify-center w-8 h-8 rounded-full bg-surface-100 text-surface-600 hover:bg-surface-200 hover:text-surface-900 transition-colors"
+                aria-label="Go back"
+              >
+                ←
+              </button>
+            )}
+            <Link href="/" className="flex items-center gap-2">
+              <img src="/logo.png" alt="TripSathi Logo" className="max-h-10 w-auto object-contain drop-shadow-sm" />
+            </Link>
+          </div>
           <nav className="hidden md:flex items-center gap-5">
             <Link href="/" className="text-surface-600 hover:text-primary-600 font-medium transition-colors text-sm">{t("nav_home")}</Link>
             <Link href="/search" className="text-surface-600 hover:text-primary-600 font-medium transition-colors text-sm">{t("nav_search")}</Link>

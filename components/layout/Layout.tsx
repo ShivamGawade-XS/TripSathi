@@ -3,7 +3,6 @@ import Header from "./Header"
 import Footer from "./Footer"
 import MobileNav from "./MobileNav"
 import ChatWidget from "@/components/ui/ChatWidget"
-import BackButton from "@/components/ui/BackButton"
 import { LanguageProvider } from "@/context/LanguageContext"
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -15,7 +14,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <Footer />
         <MobileNav />
         <ChatWidget />
-        <BackButton />
       </div>
     </LanguageProvider>
   )
