@@ -24,6 +24,9 @@ connectRedis()
 app.use("/api/v1/auth", require("./routes/auth"))
 app.use("/api/v1/search", require("./routes/search"))
 app.use("/api/v1/itinerary", require("./routes/itinerary"))
+app.use("/api/v1/packages", require("./routes/packages"))
+app.use("/api/v1/bookings", require("./routes/bookings"))
+app.use("/api/v1/faqs", require("./routes/faqs"))
 
 // health check
 app.get("/api/health", (req, res) => {
