@@ -127,12 +127,43 @@ export default function ChatWidget() {
 
   const quickReplies = [s.qr1, s.qr2, s.qr3, s.qr4]
 
-  const send = (text: string) => {
+  const send = async (text: string) => {
     if (!text.trim()) return
     const userMsg: Message = { role: "user", text }
-    const botMsg: Message = { role: "bot", text: getBotReply(text, locale) }
-    setMessages(prev => [...prev, userMsg, botMsg])
+    setMessages(prev => [...prev, userMsg])
     setInput("")
+
+    try {
+      // Localized check for super basic greetings
+      const lower = text.toLowerCase()
+      if (locale !== 'en' && (lower.includes("hello") || lower.includes("hi") || lower.includes("नमस्ते") || lower.includes("வணக்கம்") || lower.includes("నమస్కారం") || lower.includes("नमस्कार"))) {
+        setMessages(prev => [...prev, { role: "bot", text: getBotReply(text, locale) }])
+        return
+      }
+
+      // Hit Backend NLP Engine for transactional intents
+      let sessionId = typeof window !== "undefined" ? localStorage.getItem("tripsathi_chat_id") : null
+      if (!sessionId) {
+        sessionId = "session_" + Math.random().toString(36).substr(2, 9)
+        localStorage.setItem("tripsathi_chat_id", sessionId)
+      }
+
+      const res = await fetch("http://localhost:5000/api/v1/whatsapp/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text, phoneId: sessionId })
+      })
+
+      if (res.ok) {
+        const data = await res.json()
+        setMessages(prev => [...prev, { role: "bot", text: data.reply }])
+      } else {
+        setMessages(prev => [...prev, { role: "bot", text: getBotReply(text, locale) }])
+      }
+    } catch {
+      // Fallback to local dictionary if backend fails
+      setMessages(prev => [...prev, { role: "bot", text: getBotReply(text, locale) }])
+    }
   }
 
   return (
