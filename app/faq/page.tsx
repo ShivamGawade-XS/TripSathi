@@ -22,11 +22,11 @@ export default function FaqPage() {
   const s = faqStrings[locale] || faqStrings.en
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/v1/faqs")
+    fetch(`http://localhost:5000/api/v1/faqs?locale=${locale}`)
       .then(r => r.json())
       .then(d => { setFaqs(d.faqs); setCategories(d.categories) })
       .catch(() => {})
-  }, [])
+  }, [locale])
 
   const filtered = faqs.filter(f => {
     const matchCat = activeCategory === "all" || f.category === activeCategory
