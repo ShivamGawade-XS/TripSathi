@@ -15,7 +15,7 @@ export default function EnhancedFooter() {
   return (
     <footer className="bg-surface-900 text-white">
       <div className="max-w-7xl mx-auto px-4 py-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
           <div className="col-span-2 md:col-span-1 lg:col-span-2">
             <Link href="/" className="inline-block bg-white/10 hover:bg-white/20 transition-colors p-2 rounded-xl mb-1">
               <img src="/logo.png" alt="TripSathi Logo" className="max-h-12 w-auto object-contain drop-shadow" />
@@ -60,6 +60,15 @@ export default function EnhancedFooter() {
               {destinations.slice(0, 6).map(d => (
                 <Link key={d.name} href={d.href} className="block text-sm text-surface-400 hover:text-white transition-colors">{d.name}</Link>
               ))}
+            </nav>
+          </div>
+
+          <div>
+            <h3 className="font-bold text-sm uppercase tracking-wider text-surface-300 mb-4">Tools</h3>
+            <nav className="space-y-3">
+              <Link href="/alerts" className="block text-sm text-surface-400 hover:text-white transition-colors">Price Alerts</Link>
+              <Link href="/whatsapp" className="block text-sm text-surface-400 hover:text-white transition-colors">WhatsApp Bot</Link>
+              <Link href="/split" className="block text-sm text-surface-400 hover:text-white transition-colors">Group Split</Link>
             </nav>
           </div>
 
