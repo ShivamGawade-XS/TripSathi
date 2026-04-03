@@ -7,6 +7,7 @@ import Spinner from "@/components/ui/Spinner"
 import ErrorCard from "@/components/ui/ErrorCard"
 import EmptyState from "@/components/ui/EmptyState"
 import { searchAll, SearchResponse } from "@/lib/api"
+import { useLanguage } from "@/context/LanguageContext"
 
 function SearchContent() {
   const searchParams = useSearchParams()
@@ -29,11 +30,13 @@ function SearchContent() {
     }
   }, [from, to, date])
 
+  const { t } = useLanguage()
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-surface-900 mb-2">Search</h1>
-        <p className="text-surface-500">Find the best trains, buses, and hotels for your journey</p>
+        <h1 className="text-3xl font-bold text-surface-900 mb-2">{t("nav_search")}</h1>
+        <p className="text-surface-500">{t("hero_subtitle")}</p>
       </div>
 
       <div className="mb-8">

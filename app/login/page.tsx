@@ -3,9 +3,11 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { loginApi } from "@/lib/api"
+import { useLanguage } from "@/context/LanguageContext"
 
 export default function LoginPage() {
   const router = useRouter()
+  const { t } = useLanguage()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
@@ -35,8 +37,8 @@ export default function LoginPage() {
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-600 to-accent-500 flex items-center justify-center mx-auto mb-4">
             <span className="text-white font-bold text-2xl">TS</span>
           </div>
-          <h1 className="text-2xl font-bold text-surface-900">Welcome Back</h1>
-          <p className="text-surface-500 mt-2">Sign in to access your saved trips</p>
+          <h1 className="text-2xl font-bold text-surface-900">{t("login_title")}</h1>
+          <p className="text-surface-500 mt-2">{t("login_subtitle")}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="card">
@@ -48,7 +50,7 @@ export default function LoginPage() {
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-surface-700 mb-1.5">Email</label>
+              <label className="block text-sm font-medium text-surface-700 mb-1.5">{t("email_label")}</label>
               <input
                 type="email"
                 value={email}
@@ -60,7 +62,7 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-surface-700 mb-1.5">Password</label>
+              <label className="block text-sm font-medium text-surface-700 mb-1.5">{t("password_label")}</label>
               <input
                 type="password"
                 value={password}
@@ -78,13 +80,13 @@ export default function LoginPage() {
             disabled={loading}
             className="btn-primary w-full mt-6 disabled:opacity-50"
           >
-            {loading ? "Signing in..." : "Sign In"}
+            {loading ? "..." : t("nav_login")}
           </button>
 
           <p className="text-center text-sm text-surface-500 mt-4">
             Don&apos;t have an account?{" "}
             <Link href="/register" className="text-primary-600 hover:text-primary-700 font-medium">
-              Sign Up
+              {t("nav_register")}
             </Link>
           </p>
         </form>

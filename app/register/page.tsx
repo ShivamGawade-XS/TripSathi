@@ -3,9 +3,11 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { registerApi } from "@/lib/api"
+import { useLanguage } from "@/context/LanguageContext"
 
 export default function RegisterPage() {
   const router = useRouter()
+  const { t } = useLanguage()
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -36,8 +38,8 @@ export default function RegisterPage() {
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-600 to-accent-500 flex items-center justify-center mx-auto mb-4">
             <span className="text-white font-bold text-2xl">TS</span>
           </div>
-          <h1 className="text-2xl font-bold text-surface-900">Create Account</h1>
-          <p className="text-surface-500 mt-2">Join TripSathi and start planning smarter</p>
+          <h1 className="text-2xl font-bold text-surface-900">{t("register_title")}</h1>
+          <p className="text-surface-500 mt-2">{t("register_subtitle")}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="card">
@@ -49,7 +51,7 @@ export default function RegisterPage() {
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-surface-700 mb-1.5">Full Name</label>
+              <label className="block text-sm font-medium text-surface-700 mb-1.5">{t("name_label")}</label>
               <input
                 type="text"
                 value={name}
@@ -61,7 +63,7 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-surface-700 mb-1.5">Email</label>
+              <label className="block text-sm font-medium text-surface-700 mb-1.5">{t("email_label")}</label>
               <input
                 type="email"
                 value={email}
@@ -73,7 +75,7 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-surface-700 mb-1.5">Password</label>
+              <label className="block text-sm font-medium text-surface-700 mb-1.5">{t("password_label")}</label>
               <input
                 type="password"
                 value={password}
@@ -91,7 +93,7 @@ export default function RegisterPage() {
             disabled={loading}
             className="btn-primary w-full mt-6 disabled:opacity-50"
           >
-            {loading ? "Creating account..." : "Create Account"}
+            {loading ? "..." : t("register_title")}
           </button>
 
           <p className="text-center text-sm text-surface-500 mt-4">
