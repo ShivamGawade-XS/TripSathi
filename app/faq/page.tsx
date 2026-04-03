@@ -90,8 +90,8 @@ export default function FaqPage() {
           <h2 className="font-display text-2xl font-bold">{s.stillQ}</h2>
           <p className="mt-2 text-white/80">{s.support}</p>
           <div className="flex flex-wrap justify-center gap-4 mt-6">
-            <a href="mailto:support@tripsathi.com" className="bg-white/20 hover:bg-white/30 px-6 py-3 rounded-xl font-medium transition-colors">📧 support@tripsathi.com</a>
-            <a href="tel:+911800874772" className="bg-white/20 hover:bg-white/30 px-6 py-3 rounded-xl font-medium transition-colors">📞 1800-TRIP-SAT</a>
+            <a href="mailto:24co35@aitdgoa.edu.in" className="bg-white/20 hover:bg-white/30 px-6 py-3 rounded-xl font-medium transition-colors border border-white/10 shadow-sm backdrop-blur">📧 24co35@aitdgoa.edu.in</a>
+            <a href="tel:+917218694977" className="bg-white/20 hover:bg-white/30 px-6 py-3 rounded-xl font-medium transition-colors border border-white/10 shadow-sm backdrop-blur">📞 +91 7218694977</a>
           </div>
         </div>
       </div>

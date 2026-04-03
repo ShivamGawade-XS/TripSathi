@@ -52,11 +52,11 @@ export default function ContactPage() {
             </div>
             <div className="bg-white rounded-2xl shadow-md p-8 flex items-start gap-4">
               <div className="w-12 h-12 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center text-xl">📞</div>
-              <div><h3 className="font-bold text-surface-800 text-lg">{t.phone}</h3><p className="text-surface-500 mt-1">{t.callUs}<br /><strong>1800-TRIP-SAT</strong><br />{t.available}</p></div>
+              <div><h3 className="font-bold text-surface-800 text-lg">{t.phone}</h3><p className="text-surface-500 mt-1">{t.callUs}<br /><strong>+91 7218694977</strong><br />{t.available}</p></div>
             </div>
             <div className="bg-white rounded-2xl shadow-md p-8 flex items-start gap-4">
               <div className="w-12 h-12 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center text-xl">✉️</div>
-              <div><h3 className="font-bold text-surface-800 text-lg">{t.emailSupport}</h3><p className="text-surface-500 mt-1">{t.general}<br /><strong>support@tripsathi.com</strong></p></div>
+              <div><h3 className="font-bold text-surface-800 text-lg">{t.emailSupport}</h3><p className="text-surface-500 mt-1">{t.general}<br /><strong>24co35@aitdgoa.edu.in</strong></p></div>
             </div>
           </div>
         </div>
