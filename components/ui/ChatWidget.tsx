@@ -148,7 +148,7 @@ export default function ChatWidget() {
         localStorage.setItem("tripsathi_chat_id", sessionId)
       }
 
-      const res = await fetch("http://localhost:5000/api/v1/whatsapp/chat", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1"}/whatsapp/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: text, phoneId: sessionId })

@@ -12,7 +12,7 @@ export default function TrendingSections() {
   const [data, setData] = useState<{ seasonal: TrendingPkg[]; groupDeals: TrendingPkg[]; topRated: TrendingPkg[] }>({ seasonal: [], groupDeals: [], topRated: [] })
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/v1/packages/trending")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1"}/packages/trending`)
       .then(r => r.json()).then(setData).catch(() => {})
   }, [])
 
