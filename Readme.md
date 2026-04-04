@@ -4,6 +4,10 @@
 
 TripSathi is a unified travel planning platform that lets you search trains, buses, and hotels in one place. Compare prices, build itineraries, browse curated packages, and share trip plans — designed for every Indian traveler with premium UI and multilingual support.
 
+### 🌍 Live Deployment
+- **Frontend App:** [https://tripsathi-web.vercel.app](https://tripsathi-web.vercel.app)
+- **Backend API:** [https://tripsathi-api.vercel.app](https://tripsathi-api.vercel.app)
+
 ## ✨ Features
 
 ### Core
@@ -12,8 +16,11 @@ TripSathi is a unified travel planning platform that lets you search trains, bus
 - **Itinerary Builder** — Select transport + hotel, save your complete trip plan
 - **Share Trips** — Share itineraries with family via a simple link
 - **Curated Packages** — 15+ professionally curated travel packages with seasonal deals and group discounts
+- **Payment Gateway Simulator** — Fully functional UI mock supporting UPI, Cards, Net Banking, and Wallets with processing animations.
 
-### Intelligence
+### Intelligence & Architecture
+- **In-Memory Dual Persistence** — Safe serverless caching using backend `/tmp` and frontend `localStorage` to guarantee hackathon demo survival.
+- **Auto Mock-Mode** — Zero-config auth and booking emulation when MongoDB is disconnected.
 - **AI Travel Chatbot** — NLP-powered in-app assistant for booking, PNR lookup, and trip recommendations
 - **Price Alerts** — Set alerts for specific routes and get notified on price drops
 - **Group Expense Splitter** — Split travel costs among group members
