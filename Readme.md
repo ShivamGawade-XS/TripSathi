@@ -1,96 +1,149 @@
 # TripSathi 🚆🚌🏨
 
-> One platform. Every Indian journey.
+**One Platform. Every Indian Journey.**
 
-TripSathi unifies trains, buses, hotels, and itinerary planning into one seamless platform — built for every Indian traveler, from metros to Tier-2/3 cities.
+TripSathi is a unified travel planning platform that lets you search trains, buses, and hotels in one place. Compare prices, build itineraries, and share trip plans — designed for every Indian traveler.
 
----
+## Features
 
-## 🚨 The Problem
+- **Unified Search** — Search trains, buses, and hotels from a single search bar
+- **Price Comparison** — Side-by-side pricing across multiple providers
+- **Itinerary Builder** — Select transport + hotel, save your complete trip plan
+- **Share Trips** — Share itineraries with family via a simple link
+- **Hindi Support** — Full Hindi language interface (i18n ready)
+- **Mobile First** — Responsive design with bottom navigation for mobile
 
-India's travel ecosystem is completely fragmented. IRCTC for trains, redBus for buses, MakeMyTrip for hotels — no single platform connects them.
+## Tech Stack
 
-- **4+ apps** needed to plan one trip
-- **3–5 hours** average planning time per trip
-- **800M+ Indians** underserved by current tools
-- **600M+ Tier-2/3 city users** with zero access to a unified, accessible travel planning tool
+| Layer      | Technology                          |
+| ---------- | ----------------------------------- |
+| Frontend   | Next.js 14, React 18, TypeScript    |
+| Styling    | Tailwind CSS 3, Google Fonts        |
+| Backend    | Express.js 4, Node.js               |
+| Database   | MongoDB (Mongoose ODM)              |
+| Caching    | Redis                               |
+| Auth       | JWT (JSON Web Tokens)               |
 
----
+## Getting Started
 
-## ✅ Our Solution
+### Prerequisites
 
-TripSathi brings it all together:
+- Node.js 18+
+- MongoDB (local or Atlas)
+- Redis (optional, for caching)
 
-- **Unified Multi-Modal Search** — Single search fetches trains + buses + hotels together. No switching apps. No missing the best deal.
-- **Smart Route Aggregation** — Combines govt + private transport options and ranks by price, duration, and comfort. Finds combos no single app shows.
-- **Price Comparison Engine** — Real-time side-by-side pricing across transport modes and hotels. Saves avg ₹500+ per trip booking.
-- **Itinerary Saver & Sharer** — Save full trip plans (transport + hotel) to your account. Share via link with family or co-travelers.
-- **Tier-2/3 Accessibility** — Hindi-first UI, low-bandwidth optimized, works on entry-level Android phones.
-
----
-
-## 🧑‍🤝‍🧑 Target Audience
-
-| Segment | Need |
-|---|---|
-| Students & Budget Travelers | Price-sensitive, mobile-first |
-| Families | Multi-mode + hotel bundling |
-| Tier-2/3 City Users | Hindi/regional language support |
-
----
-
-## 🏁 Competitor Gap
-
-| Feature | IRCTC | redBus | **TripSathi** |
-|---|---|---|---|
-| Train Booking | ✅ | ❌ | ✅ |
-| Bus Booking | ❌ | ✅ | ✅ |
-| Hotel Booking | ❌ | ❌ | ✅ |
-| Price Comparison | ❌ | ❌ | ✅ |
-| Itinerary Saver | ❌ | ❌ | ✅ |
-| Hindi/Regional UI | ❌ | ❌ | ✅ |
-
----
-
-## 🛠️ Tech Stack (Summary)
-
-- **Frontend:** React / Next.js 14, Tailwind CSS
-- **Backend:** Node.js 20, Express.js
-- **Database:** MongoDB Atlas, Redis Cache
-- **APIs:** Google Maps, IRCTC, redBus/AbhiBus, OYO, MakeMyTrip, Goibibo
-- **Deployment:** Vercel (frontend), Render/Railway (backend)
-
----
-
-## 💰 Business Model
-
-- **Booking Commission:** 2–5% per confirmed booking
-- **Premium Subscription:** ₹99/month for power users
-- **B2B API Licensing:** Route aggregation engine licensed to travel agents & state tourism boards
-
----
-
-## 👥 Team
-
-**Crimson Syndicate** — Built at Hacknovate 7.0
-
----
-
-## 🚀 Getting Started
+### Frontend Setup
 
 ```bash
-# Clone the repo
-git clone https://github.com/crimson-syndicate/tripsathi.git
-cd tripsathi
+# Install dependencies
+npm install
+
+# Create environment file
+cp .env.example .env.local
+
+# Start dev server
+npm run dev
+```
+
+The frontend runs on [http://localhost:3000](http://localhost:3000)
+
+### Backend Setup
+
+```bash
+# Navigate to server directory
+cd server
 
 # Install dependencies
 npm install
 
-# Set up environment variables
+# Create environment file
 cp .env.example .env
 
-# Run development server
+# Start dev server
 npm run dev
 ```
 
-> **Note:** A mock API fallback is included — the full demo works without live API keys.
+The backend runs on [http://localhost:5000](http://localhost:5000)
+
+### Environment Variables
+
+**Frontend** (`.env.local`):
+```
+NEXT_PUBLIC_API_URL=http://localhost:5000/api/v1
+```
+
+**Backend** (`server/.env`):
+```
+PORT=5000
+NODE_ENV=development
+MONGODB_URI=mongodb://localhost:27017/tripsathi
+JWT_SECRET=your-secret-key-here
+REDIS_URL=redis://localhost:6379
+```
+
+## Project Structure
+
+```
+TripSathi/
+├── app/                    # Next.js App Router pages
+│   ├── layout.tsx          # Root layout with Header/Footer
+│   ├── page.tsx            # Homepage
+│   ├── search/             # Search results page
+│   ├── login/              # Login page
+│   ├── register/           # Registration page
+│   ├── dashboard/          # Saved trips
+│   ├── profile/            # User profile
+│   └── shared/[token]/     # Shared itinerary view
+├── components/
+│   ├── layout/             # Header, Footer, MobileNav
+│   ├── home/               # Hero, Features, PopularRoutes
+│   ├── search/             # CityInput, DatePicker, SearchBar
+│   ├── results/            # TransportCard, HotelCard, etc.
+│   ├── itinerary/          # ItineraryBuilder, SaveButton
+│   ├── dashboard/          # TripCard
+│   └── ui/                 # Spinner, Skeleton, EmptyState
+├── context/                # AuthContext
+├── hooks/                  # useSearch
+├── lib/                    # api.ts, cities.ts, i18n.ts
+├── server/                 # Express.js backend
+│   ├── controllers/        # Route handlers
+│   ├── models/             # Mongoose models
+│   ├── routes/             # API routes
+│   ├── middleware/          # Auth, validation, security
+│   ├── services/           # Aggregation, ranking, mock
+│   └── data/mock/          # Mock JSON data
+└── public/locales/         # i18n translation files
+```
+
+## API Endpoints
+
+### Auth
+- `POST /api/v1/auth/register` — Create account
+- `POST /api/v1/auth/login` — Login
+- `GET /api/v1/auth/me` — Get current user (protected)
+
+### Search
+- `GET /api/v1/search?from=Delhi&to=Mumbai` — Unified search
+- `GET /api/v1/search/transport` — Transport only
+- `GET /api/v1/search/hotels` — Hotels only
+
+### Itinerary
+- `POST /api/v1/itinerary` — Create itinerary (protected)
+- `GET /api/v1/itinerary` — Get my itineraries (protected)
+- `GET /api/v1/itinerary/shared/:token` — View shared itinerary
+- `DELETE /api/v1/itinerary/:id` — Delete itinerary (protected)
+
+## Mock Data
+
+The app includes mock data for demo purposes — no real API keys needed. Search routes like:
+- Delhi → Mumbai
+- Bangalore → Goa
+- Chennai → Hyderabad
+
+## License
+
+This project is for educational purposes.
+
+---
+
+Built with ❤️ for Indian travelers.
