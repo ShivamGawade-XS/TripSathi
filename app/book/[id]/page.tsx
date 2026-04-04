@@ -1,13 +1,16 @@
 "use client"
 import { useState } from "react"
-import { useParams, useSearchParams } from "next/navigation"
+import { useParams, useSearchParams, useRouter } from "next/navigation"
 import Link from "next/link"
+import PaymentGateway, { TransactionResult } from "@/components/payment/PaymentGateway"
 
 export default function BookingPage() {
   const params = useParams()
   const searchParams = useSearchParams()
   const [step, setStep] = useState(1)
   const [bookingRef, setBookingRef] = useState("")
+  const [showPayment, setShowPayment] = useState(false)
+  const router = useRouter()
   const [form, setForm] = useState({
     passengers: [{ name: "", age: "", gender: "male" }],
     contactEmail: "", contactPhone: "", specialRequests: "",
@@ -28,70 +31,36 @@ export default function BookingPage() {
     setForm(prev => ({ ...prev, passengers: updated }))
   }
 
-  const handleSubmit = async () => {
+  const packageName = String(params.id).replace(/-/g, " ")
+  const estimatedPrice = 15999 * travelers
+
+  const buildPayload = () => ({
+    type: "package",
+    packageId: String(params.id),
+    travelDate: date || new Date().toISOString(),
+    totalAmount: estimatedPrice,
+    passengers: form.passengers,
+    contactEmail: form.contactEmail,
+    contactPhone: form.contactPhone,
+    specialRequests: form.specialRequests,
+    transport: { type: "package", name: packageName, provider: "TripSathi Packages", class: form.class },
+    to: packageName,
+  })
+
+  const handleSubmit = () => {
     const token = localStorage.getItem("tripsathi_token")
-    if (!token) {
-      window.location.href = "/login"
-      return
-    }
+    if (!token) { router.push("/login"); return }
+    setShowPayment(true)
+  }
 
-    try {
-      const payload = {
-        type: "package",
-        packageId: String(params.id),
-        travelDate: date || new Date().toISOString(),
-        totalAmount: 0, // will be set below
-        passengers: form.passengers,
-        contactEmail: form.contactEmail,
-        contactPhone: form.contactPhone,
-        specialRequests: form.specialRequests,
-        transport: { type: "package", name: String(params.id).replace(/-/g, " "), provider: "TripSathi Packages", class: form.class },
-        to: String(params.id).replace(/-/g, " "),
-      }
-
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1"}/bookings`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify(payload)
-      })
-
-      if (!res.ok) throw new Error("Booking failed")
-
-      const bookingData = await res.json()
-      setBookingRef(bookingData.bookingRef || bookingData._id)
-
-      // persist to localStorage
-      const existing = JSON.parse(localStorage.getItem("tripsathi_bookings") || "[]")
-      existing.unshift(bookingData)
-      localStorage.setItem("tripsathi_bookings", JSON.stringify(existing))
-
-      setStep(4)
-    } catch (err) {
-      const ref = "TS" + Date.now().toString(36).toUpperCase() + Math.random().toString(36).substring(2, 6).toUpperCase()
-      // fallback: save locally even if API fails
-      const fallbackBooking = {
-        _id: "local-" + ref,
-        bookingRef: ref,
-        type: "package",
-        travelDate: date || new Date().toISOString(),
-        totalAmount: 0,
-        transport: { name: String(params.id).replace(/-/g, " "), provider: "TripSathi Packages" },
-        to: String(params.id).replace(/-/g, " "),
-        status: "confirmed",
-        createdAt: new Date().toISOString()
-      }
-      const existing = JSON.parse(localStorage.getItem("tripsathi_bookings") || "[]")
-      existing.unshift(fallbackBooking)
-      localStorage.setItem("tripsathi_bookings", JSON.stringify(existing))
-      setBookingRef(ref)
-      setStep(4)
-    }
+  const handlePaymentSuccess = (txn: TransactionResult) => {
+    setBookingRef(txn.txnId)
+    setShowPayment(false)
+    setStep(4)
   }
 
   return (
+    <>
     <div className="min-h-screen bg-surface-50 py-8">
       <div className="max-w-3xl mx-auto px-4">
         <Link href={`/packages/${params.id}`} className="text-primary-600 hover:underline text-sm mb-6 inline-block">← Back to Package</Link>
@@ -158,7 +127,7 @@ export default function BookingPage() {
               <p className="text-sm text-surface-600">📧 {form.contactEmail || "—"} • 📱 {form.contactPhone || "—"}</p>
               {form.specialRequests && <p className="text-sm text-surface-600">💬 {form.specialRequests}</p>}
             </div>
-            <div className="flex gap-3"><button onClick={() => setStep(2)} className="btn-secondary flex-1 py-4">Back</button><button onClick={handleSubmit} className="btn-primary flex-1 py-4 font-bold text-lg">Confirm Booking</button></div>
+            <div className="flex gap-3"><button onClick={() => setStep(2)} className="btn-secondary flex-1 py-4">Back</button><button onClick={handleSubmit} className="btn-primary flex-1 py-4 font-bold text-lg">💳 Proceed to Pay</button></div>
           </div>
         )}
 
@@ -174,5 +143,17 @@ export default function BookingPage() {
         )}
       </div>
     </div>
+
+    {showPayment && (
+      <PaymentGateway
+        amount={estimatedPrice}
+        itemName={packageName}
+        itemType="package"
+        bookingPayload={buildPayload()}
+        onClose={() => setShowPayment(false)}
+        onSuccess={handlePaymentSuccess}
+      />
+    )}
+    </>
   )
 }

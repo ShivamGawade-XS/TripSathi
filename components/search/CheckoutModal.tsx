@@ -1,6 +1,8 @@
+"use client"
 import { useState, useEffect } from "react"
 import { TransportResult, HotelResult } from "@/lib/api"
 import { useRouter } from "next/navigation"
+import PaymentGateway, { TransactionResult } from "@/components/payment/PaymentGateway"
 
 interface CheckoutModalProps {
   item: TransportResult | HotelResult | null
@@ -14,7 +16,7 @@ export default function CheckoutModal({ item, type, onClose }: CheckoutModalProp
   const [passengerAge, setPassengerAge] = useState("")
   const [checkIn, setCheckIn] = useState("")
   const [checkOut, setCheckOut] = useState("")
-  const [loading, setLoading] = useState(false)
+  const [showPayment, setShowPayment] = useState(false)
   const [error, setError] = useState("")
 
   useEffect(() => {
@@ -33,66 +35,46 @@ export default function CheckoutModal({ item, type, onClose }: CheckoutModalProp
   const payloadItem = item as any
   const amount = isTransport ? payloadItem.price : payloadItem.pricePerNight
 
-  const handleConfirm = async (e: React.FormEvent) => {
+  const buildPayload = () => {
+    const payload: any = {
+      type: type,
+      travelDate: isTransport ? new Date().toISOString() : checkIn,
+      totalAmount: amount,
+    }
+    if (isTransport) {
+      payload.transport = { type: payloadItem.type, name: payloadItem.name, provider: payloadItem.provider, class: payloadItem.class }
+      payload.from = payloadItem.from
+      payload.to = payloadItem.to
+      payload.passengers = [{ name: passengerName, age: Number(passengerAge), gender: "male" }]
+    } else {
+      payload.hotel = { name: payloadItem.name, checkIn: new Date(checkIn), checkOut: new Date(checkOut), rooms: 1 }
+      payload.to = payloadItem.city
+    }
+    return payload
+  }
+
+  const handleProceed = (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
-    setError("")
-
     const token = localStorage.getItem("tripsathi_token")
-    if (!token) {
-      router.push("/login")
-      return
-    }
+    if (!token) { router.push("/login"); return }
+    setShowPayment(true)
+  }
 
-    try {
-      const payload: any = {
-        type: type,
-        travelDate: isTransport ? new Date().toISOString() : checkIn,
-        totalAmount: amount,
-      }
+  const handlePaymentSuccess = (txn: TransactionResult) => {
+    router.push("/dashboard")
+  }
 
-      if (isTransport) {
-        payload.transport = {
-          type: payloadItem.type,
-          name: payloadItem.name,
-          provider: payloadItem.provider,
-          class: payloadItem.class
-        }
-        payload.from = payloadItem.from
-        payload.to = payloadItem.to
-        payload.passengers = [{ name: passengerName, age: Number(passengerAge), gender: "male" }]
-      } else {
-        payload.hotel = {
-          name: payloadItem.name,
-          checkIn: new Date(checkIn),
-          checkOut: new Date(checkOut),
-          rooms: 1
-        }
-        payload.to = payloadItem.city
-      }
-
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1"}/bookings`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify(payload)
-      })
-
-      if (!res.ok) throw new Error("Failed to process checkout")
-      
-      const bookingData = await res.json()
-      // persist in browser so it survives serverless cold starts
-      const existing = JSON.parse(localStorage.getItem("tripsathi_bookings") || "[]")
-      existing.unshift(bookingData)
-      localStorage.setItem("tripsathi_bookings", JSON.stringify(existing))
-
-      router.push("/dashboard")
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Error")
-      setLoading(false)
-    }
+  if (showPayment) {
+    return (
+      <PaymentGateway
+        amount={amount}
+        itemName={payloadItem.name}
+        itemType={type}
+        bookingPayload={buildPayload()}
+        onClose={() => setShowPayment(false)}
+        onSuccess={handlePaymentSuccess}
+      />
+    )
   }
 
   return (
@@ -103,7 +85,7 @@ export default function CheckoutModal({ item, type, onClose }: CheckoutModalProp
           <button onClick={onClose} className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors">✕</button>
         </div>
         
-        <form onSubmit={handleConfirm} className="p-6">
+        <form onSubmit={handleProceed} className="p-6">
           <div className="bg-surface-50 p-4 rounded-xl border border-surface-200 mb-6">
             <h3 className="font-bold text-surface-900 mb-1">{payloadItem.name}</h3>
             <p className="text-sm text-surface-500">{payloadItem.provider || payloadItem.city}</p>
@@ -119,7 +101,7 @@ export default function CheckoutModal({ item, type, onClose }: CheckoutModalProp
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-surface-700 mb-1">Passenger Name</label>
-                <input required type="text" value={passengerName} onChange={e=>setPassengerName(e.target.value)} className="w-full border border-surface-300 rounded-lg p-2.5 outline-none focus:border-primary-500" placeholder="Full name ID proof" />
+                <input required type="text" value={passengerName} onChange={e=>setPassengerName(e.target.value)} className="w-full border border-surface-300 rounded-lg p-2.5 outline-none focus:border-primary-500" placeholder="Full name as on ID proof" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-surface-700 mb-1">Age</label>
@@ -141,8 +123,8 @@ export default function CheckoutModal({ item, type, onClose }: CheckoutModalProp
 
           <div className="mt-8 flex gap-3">
             <button type="button" onClick={onClose} className="flex-1 py-3 rounded-xl border border-surface-300 font-bold text-surface-700 hover:bg-surface-50 transition-colors">Cancel</button>
-            <button type="submit" disabled={loading} className="flex-1 btn-primary py-3">
-              {loading ? "Confirming..." : "Confirm & Pay"}
+            <button type="submit" className="flex-1 btn-primary py-3">
+              Proceed to Pay
             </button>
           </div>
         </form>
