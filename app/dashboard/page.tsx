@@ -35,8 +35,20 @@ export default function DashboardPage() {
       import("@/lib/api").then(m => m.getMyBookings(token)).catch(() => [])
     ])
       .then(([tripsData, bookingsData]) => {
-        setTrips(tripsData)
-        setBookings(bookingsData)
+        setTrips(Array.isArray(tripsData) ? tripsData : [])
+        // merge API bookings with localStorage bookings (dedup by bookingRef)
+        const localBookings = JSON.parse(localStorage.getItem("tripsathi_bookings") || "[]")
+        const apiBookings = Array.isArray(bookingsData) ? bookingsData : []
+        const seen = new Set<string>()
+        const merged: any[] = []
+        for (const b of [...apiBookings, ...localBookings]) {
+          const key = b.bookingRef || b._id
+          if (!seen.has(key)) { seen.add(key); merged.push(b) }
+        }
+        merged.sort((a: any, b: any) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
+        setBookings(merged)
+        // sync merged set back to localStorage
+        localStorage.setItem("tripsathi_bookings", JSON.stringify(merged))
       })
       .catch(() => setError("Failed to load dashboard"))
       .finally(() => setLoading(false))

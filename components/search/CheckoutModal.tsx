@@ -82,6 +82,12 @@ export default function CheckoutModal({ item, type, onClose }: CheckoutModalProp
 
       if (!res.ok) throw new Error("Failed to process checkout")
       
+      const bookingData = await res.json()
+      // persist in browser so it survives serverless cold starts
+      const existing = JSON.parse(localStorage.getItem("tripsathi_bookings") || "[]")
+      existing.unshift(bookingData)
+      localStorage.setItem("tripsathi_bookings", JSON.stringify(existing))
+
       router.push("/dashboard")
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error")
