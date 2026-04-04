@@ -1,5 +1,5 @@
 const User = require("../models/User")
-const { generateToken } = require("../middleware/auth")
+const { generateToken, isMockMode } = require("../middleware/auth")
 
 // register new user
 // POST /api/v1/auth/register
@@ -7,7 +7,7 @@ const registerUser = async (req, res) => {
   try {
     const { name, email, password, language } = req.body
 
-    if (process.env.USE_MOCK_API === "true") {
+    if (isMockMode()) {
       const token = generateToken("mock-user-123")
       return res.status(201).json({ _id: "mock-user-123", name, email, language: language || "en", token })
     }
@@ -45,7 +45,7 @@ const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body
 
-    if (process.env.USE_MOCK_API === "true") {
+    if (isMockMode()) {
       const token = generateToken("mock-user-123")
       return res.json({ _id: "mock-user-123", name: "Demo User", email, language: "en", token })
     }
@@ -79,9 +79,9 @@ const loginUser = async (req, res) => {
 // GET /api/v1/auth/me
 const getMe = async (req, res) => {
   try {
-    if (process.env.USE_MOCK_API === "true") {
+    if (isMockMode()) {
       return res.json({
-        _id: "mock-user-123", name: "Demo User", email: "demo@tripsathi.com", 
+        _id: "mock-user-123", name: "Demo User", email: "demo@tripsathi.com",
         language: "en", createdAt: new Date()
       })
     }
